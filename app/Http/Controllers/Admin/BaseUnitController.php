@@ -44,6 +44,8 @@ class BaseUnitController extends Controller
 
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
+            'status' => 'required|in:Active,Inactive',
+            
         ]);
 
         $data = BaseUnit::create($validatedData);
@@ -75,7 +77,8 @@ class BaseUnitController extends Controller
     {
 
         $validatedData = $this->validate($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255',            
+            'status' => 'required|in:Active,Inactive',          
         ]);
 
         $base_units = BaseUnit::findOrFail($id);

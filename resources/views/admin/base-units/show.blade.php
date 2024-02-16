@@ -21,7 +21,12 @@
                             <th style="width:160px;">Name</th>
                             <th style="width:10px;">:</th>
                             <td>{{ $data->name }}</td>
-                        </tr>                       
+                        </tr> 
+                        <tr>
+                            <th>Status</th>
+                            <th>:</th>
+                            <td>{{ $data->status }}</td>
+                        </tr>                        
                     </table>
                 </div>
             </div>

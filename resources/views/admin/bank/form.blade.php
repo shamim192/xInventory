@@ -6,26 +6,21 @@
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>
+
 <div class="form-group">
-    <label class="required">Base Unit:</label>
-    <select class="form-control  @error('base_unit_id') is-invalid @enderror select2" name="base_unit_id" required>
-        <option value="" selected disabled>Select Base Unit</option>
-        @foreach ($baseUnits as $baseUnit)
-            <option value="{{ $baseUnit->id }}"
-                {{ old('base_unit_id', isset($data) ? $data->base_unit_id : '') == $baseUnit->id ? 'selected' : '' }}>
-                {{ $baseUnit->name }}
-            </option>
-        @endforeach
-    </select>
-    @error('base_unit_id')
+    <label class="required">Branch:</label>
+    <input type="text" class="form-control @error('branch') is-invalid @enderror" name="branch"
+        value="{{ old('branch', isset($data) ? $data->branch : '') }}" required>
+    @error('branch')
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>
+
 <div class="form-group">
-    <label class="required">Quantity:</label>
-    <input type="number" step="any" min="0" class="form-control @error('quantity') is-invalid @enderror"
-        name="quantity" value="{{ old('quantity', isset($data) ? $data->quantity : '') }}" required>
-    @error('quantity')
+    <label class="required">Account Number:</label>
+    <input type="number" class="form-control @error('account_number') is-invalid @enderror" name="account_number"
+        value="{{ old('account_number', isset($data) ? $data->account_number : '') }}" required>
+    @error('account_number')
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>

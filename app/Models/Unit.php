@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Unit extends Model
 {
-    protected $fillable = ['name', 'quantity', 'base_unit_id'];
+    protected $fillable = ['name', 'quantity', 'base_unit_id','status'];
     
     public function baseUnit()
     {

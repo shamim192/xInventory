@@ -31,14 +31,17 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
     Route::get('profile/password', 'ProfileController@password')->name('profile.password');
     Route::post('profile/password', 'ProfileController@passwordUpdate');
 
-    Route::resource('categories', 'CategoryController');
-    Route::resource('types', 'TypeController');
-    Route::resource('sizes', 'SizeController');
-    Route::resource('colors', 'ColorController');
-    Route::resource('companies', 'CompanyController');
-    Route::resource('factories', 'FactoryController');
-    Route::resource('stores', 'StoreController');
+    Route::resource('user', 'UserController');
+    Route::get('customers/due', 'CustomerController@due')->name('customers.due');
+    Route::resource('customer', 'CustomerController');
+    Route::get('suppliers/due', 'SupplierController@due')->name('suppliers.due');
+    Route::resource('supplier', 'SupplierController');
+
     Route::resource('base-units', 'BaseUnitController');
     Route::resource('units', 'UnitController');
+    Route::resource('categories', 'CategoryController');
+    Route::resource('products', 'ProductController');
+    
+    Route::resource('bank', 'BankController');
     
 });

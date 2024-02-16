@@ -46,7 +46,8 @@ class UnitController extends Controller
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'base_unit_id' => 'required|exists:base_units,id',            
-            'quantity' => 'required|numeric',
+            'quantity' => 'required|numeric',            
+            'status' => 'required|in:Active,Inactive',
         ]);
 
         $data = Unit::create($validatedData);
@@ -82,6 +83,7 @@ class UnitController extends Controller
             'name' => 'required|max:255',
             'base_unit_id' => 'required|exists:base_units,id',            
             'quantity' => 'required|numeric',
+            'status' => 'required|in:Active,Inactive',
         ]);
 
         $units = Unit::findOrFail($id);

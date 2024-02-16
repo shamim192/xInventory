@@ -1,15 +1,15 @@
 @extends('admin.layouts.app')
 
-@section('title_prepend', 'Unit')
+@section('title_prepend', 'Product')
 
 @section('content')
     <section class="content">
         <div class="card">
             <div class="card-header">
                 <div class="d-lg-flex justify-content-between align-items-center">
-                    <h4 class="m-0">Units</h4>
+                    <h4 class="m-0">Products</h4>
                     <div class="d-lg-flex">
-                        <form method="GET" action="{{ route('units.index') }}" class="d-lg-flex justify-content-end">
+                        <form method="GET" action="{{ route('products.index') }}" class="d-lg-flex justify-content-end">
                             <div class="form-group mb-0">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -32,10 +32,10 @@
                             <div class="form-group mb-0">
                                 <button type="submit" class="btn btn-outline-secondary btn-flat"><i
                                         class="fa fa-search"></i> Search</button>
-                                <a class="btn btn-outline-secondary btn-flat" href="{{ route('units.index') }}"><i
+                                <a class="btn btn-outline-secondary btn-flat" href="{{ route('products.index') }}"><i
                                         class="fa fa-times"></i></a>
 
-                                <a class="btn btn-secondary btn-flat" href="{{ route('units.create') . qString() }}"><i
+                                <a class="btn btn-secondary btn-flat" href="{{ route('products.create') . qString() }}"><i
                                         class="fa fa-plus"></i> Add</a>
                             </div>
                         </form>
@@ -43,14 +43,18 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
+                <div class="table-responsive-lg">
                     <table class="table table-bordered table-hover myTable">
                         <thead>
                             <tr>
-                                <th>SL</th>
+                                <th>Code</th>
                                 <th>Name</th>
+                                <th>Model</th>
+                                <th>Category</th>
+                                <th>Purchase Price</th>
+                                <th>MRP</th>
+                                <th>Discount Percentage</th>
                                 <th>Base Unit</th>
-                                <th>Quantity</th>
                                 <th>Status</th>
                                 <th class="col-action">Action</th>
                             </tr>
@@ -58,21 +62,26 @@
                         <tbody>
                             @foreach ($records as $val)
                                 <tr>
-                                    <td>{{ $serial++ }}</td>
+                                    <td>{{ $val->code }}</td>
                                     <td>{{ $val->name }}</td>
+                                    <td>{{ $val->model }}</td>
+                                    <td>{{ $val->category_id != null ? $val->category->name : '-' }}</td>
+                                    <td>{{ $val->purchase_price }}</td>
+                                    <td>{{ $val->mrp }}</td>
+                                    <td>{{ $val->discount_percentage }}</td>
                                     <td>{{ optional($val->baseUnit)->name }}</td>
-                                    <td>{{ $val->quantity }}</td>
                                     <td>{{ $val->status }}</td>
+
                                     <td>
                                         <x-sp-components::action-group>
                                             <a class="dropdown-item"
-                                                href="{{ route('units.show', $val->id) . qString() }}"><i
+                                                href="{{ route('products.show', $val->id) . qString() }}"><i
                                                     class="fa fa-eye"></i> Show</a>
                                             <a class="dropdown-item"
-                                                href="{{ route('units.edit', $val->id) . qString() }}"><i
+                                                href="{{ route('products.edit', $val->id) . qString() }}"><i
                                                     class="fa fa-pencil"></i> Edit</a>
                                             <a class="dropdown-item"
-                                                onclick="deleted('{{ route('units.destroy', $val->id) . qString() }}')"><i
+                                                onclick="deleted('{{ route('products.destroy', $val->id) . qString() }}')"><i
                                                     class="fa fa-trash"></i> Delete</a>
                                         </x-sp-components::action-group>
                                     </td>

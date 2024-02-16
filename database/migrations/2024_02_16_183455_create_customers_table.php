@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('units', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('quantity',14,2);
-            $table->foreignId('base_unit_id')->constrained('base_units')->cascadeOnDelete();
+            $table->string('mobile')->unique();
+            $table->text('address')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('shop_name')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('units');
+        Schema::dropIfExists('customers');
     }
 };

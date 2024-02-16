@@ -21,6 +21,7 @@ class DemoSeeder extends Seeder
                 'base_unit_id' => 1,
                 'name' => '25KG',
                 'quantity' => 25,
+                'status' =>'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -28,6 +29,7 @@ class DemoSeeder extends Seeder
                 'base_unit_id' => 4,
                 'name' => '5Litre',
                 'quantity' => 5,
+                'status' =>'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

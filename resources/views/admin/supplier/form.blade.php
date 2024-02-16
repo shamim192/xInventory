@@ -6,26 +6,29 @@
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>
+
 <div class="form-group">
-    <label class="required">Base Unit:</label>
-    <select class="form-control  @error('base_unit_id') is-invalid @enderror select2" name="base_unit_id" required>
-        <option value="" selected disabled>Select Base Unit</option>
-        @foreach ($baseUnits as $baseUnit)
-            <option value="{{ $baseUnit->id }}"
-                {{ old('base_unit_id', isset($data) ? $data->base_unit_id : '') == $baseUnit->id ? 'selected' : '' }}>
-                {{ $baseUnit->name }}
-            </option>
-        @endforeach
-    </select>
-    @error('base_unit_id')
+    <label class="required">Mobile No:</label>
+    <input type="number" class="form-control @error('mobile') is-invalid @enderror" name="mobile"
+        value="{{ old('mobile', isset($data) ? $data->mobile : '') }}" required>
+    @error('mobile')
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>
 <div class="form-group">
-    <label class="required">Quantity:</label>
-    <input type="number" step="any" min="0" class="form-control @error('quantity') is-invalid @enderror"
-        name="quantity" value="{{ old('quantity', isset($data) ? $data->quantity : '') }}" required>
-    @error('quantity')
+    <label>Address:</label>
+    <textarea type="text" class="form-control @error('address') is-invalid @enderror" name="address"> {{ old('address', isset($data) ? $data->address : '') }} </textarea>
+    @error('address')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
+</div>
+
+<div class="form-group">
+    <label>Shop Name:</label>
+    <input type="text" class="form-control @error('shop_name') is-invalid @enderror" name="shop_name"
+        value="{{ old('shop_name', isset($data) ? $data->shop_name : '') }}">
+
+    @error('shop_name')
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>

@@ -50,6 +50,7 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Name</th>
+                                <th>Status</th>
                                 <th class="col-action">Action</th>
                             </tr>
                         </thead>
@@ -57,7 +58,8 @@
                             @foreach ($records as $val)
                                 <tr>
                                     <td>{{ $serial++ }}</td>
-                                    <td>{{ $val->name }}</td>           
+                                    <td>{{ $val->name }}</td>                                     
+                                    <td>{{ $val->status }}</td>         
                                     <td>
                                         <x-sp-components::action-group>                                            
                                                 <a class="dropdown-item"

@@ -1,16 +1,16 @@
 @extends('admin.layouts.app')
 
-@section('title_prepend', 'Unit')
+@section('title_prepend', 'Supplier')
 
 @section('content')
     <section class="content">
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h4 class="m-0 mt-2"> Unit #{{ $data->id }}</h4>
+                    <h4 class="m-0 mt-2">Supplier #{{ $data->id }}</h4>
                     <div class="d-flex">
                         <a class="btn btn-secondary btn-flat float-right ml-3"
-                            href="{{ route('units.index') . qString() }}"><i class="fa fa-arrow-left"></i> Back</a>
+                            href="{{ route('supplier.index') . qString() }}"><i class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </div>
             </div>
@@ -23,20 +23,25 @@
                             <td>{{ $data->name }}</td>
                         </tr>
                         <tr>
-                            <th>Base Unit</th>
+                            <th>Mobile</th>
                             <th>:</th>
-                            <td>{{ $data->baseUnit->name }}</td>
-                        </tr>                        
+                            <td>{{ $data->mobile }}</td>
+                        </tr>
                         <tr>
-                            <th>Quantity</th>
+                            <th>Address</th>
                             <th>:</th>
-                            <td>{{ $data->quantity }}</td>
-                        </tr>                  
+                            <td>{!! nl2br($data->address) !!}</td>
+                        </tr>
+                        <tr>
+                            <th>Shop Name</th>
+                            <th>:</th>
+                            <td>{{ $data->shop_name }}</td>
+                        </tr>
                         <tr>
                             <th>Status</th>
                             <th>:</th>
                             <td>{{ $data->status }}</td>
-                        </tr>                  
+                        </tr>
                     </table>
                 </div>
             </div>

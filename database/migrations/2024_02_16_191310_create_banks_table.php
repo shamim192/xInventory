@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('units', function (Blueprint $table) {
+        Schema::create('banks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('quantity',14,2);
-            $table->foreignId('base_unit_id')->constrained('base_units')->cascadeOnDelete();
+            $table->string('name')->unique();
+            $table->string('branch');
+            $table->string('account_number');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('units');
+        Schema::dropIfExists('banks');
     }
 };
