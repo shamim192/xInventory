@@ -43,5 +43,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
     Route::resource('products', 'ProductController');
     
     Route::resource('bank', 'BankController');
+
+    Route::group(['namespace' => 'Stock'], function () {
+
+        Route::get('stock/products-by-category/{category}', 'StockController@getProductsByCategory');
+        Route::resource('stock', 'StockController');
+
+        Route::post('supplier-wise-stock-ajax', 'StockReturnController@supplierWiseStock')->name('supplier-wise-stock-ajax');
+        Route::post('stock-item-ajax', 'StockReturnController@stockItem')->name('stock-item-ajax');
+        Route::resource('stock-return', 'StockReturnController');
+    });
     
 });
+

@@ -11,6 +11,12 @@ class Unit extends Model
     
     public function baseUnit()
     {
-        return $this->belongsTo(BaseUnit::class);
+        return $this->belongsTo(BaseUnit::class, 'base_unit_id');
+    }
+
+    public function units()
+    {
+       $data = Unit::where('base_unit_id', $this->base_unit_id)->get(); 
+        return $data;
     }
 }

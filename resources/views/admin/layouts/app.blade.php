@@ -98,30 +98,52 @@
                         </a>
                     </li>
                     <li
-                            class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*') ? 'active menu-open' : '' }}">
-                            <a href="#">
-                                <i class="fa fa-user"></i>
-                                <span>User</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                    <li class="{{ Request::routeIs('customer.*') ? 'active' : '' }}">
-                                        <a href="{{ route('customer.index') }}"><i class="fa fa-circle-thin"
-                                            aria-hidden="true"></i>Customers</a>
-                                    </li>
-                                    <li class="{{ Request::routeIs('supplier.*') ? 'active' : '' }}">
-                                        <a href="{{ route('supplier.index') }}"><i class="fa fa-circle-thin"
-                                            aria-hidden="true"></i>Suppliers</a>
-                                    </li>
+                        class="treeview {{ Request::routeIs('stock.*') || Request::routeIs('stock-return.*') ? 'active menu-open' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-download"></i>
+                            <span>Stocks</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
 
-                                        <li class="{{ Request::routeIs('user.*') ? 'active' : '' }}">
-                                            <a href="{{ route('user.index') }}"><i class="fa fa-circle-thin"
-                                                aria-hidden="true"></i>Users</a>
-                                        </li>                                  
-                            </ul>
-                        </li>
+                                <li class="{{ Request::routeIs('stock.*') ? 'active' : '' }}">
+                                    <a href="{{ route('stock.index') }}"><i class="fa fa-circle-thin"
+                                            aria-hidden="true"></i>Stock In </a>
+                                </li>
+
+                                <li class="{{ Request::routeIs('stock-return.*') ? 'active' : '' }}">
+                                    <a href="{{ route('stock-return.index') }}"><i class="fa fa-circle-thin"
+                                            aria-hidden="true"></i>Stock Return </a>
+                                </li>
+                        </ul>
+                    </li>
+                    <li
+                        class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*') ? 'active menu-open' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-user"></i>
+                            <span>User</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{ Request::routeIs('customer.*') ? 'active' : '' }}">
+                                <a href="{{ route('customer.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Customers</a>
+                            </li>
+                            <li class="{{ Request::routeIs('supplier.*') ? 'active' : '' }}">
+                                <a href="{{ route('supplier.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Suppliers</a>
+                            </li>
+
+                            <li class="{{ Request::routeIs('user.*') ? 'active' : '' }}">
+                                <a href="{{ route('user.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Users</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li
                         class="treeview {{ Request::routeIs('base-units.*') || Request::routeIs('units.*') || Request::routeIs('categories.*') || Request::routeIs('bank.*') || Request::routeIs('products.*') ? 'active menu-open' : '' }}">
                         <a href="#">
@@ -131,7 +153,7 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">   
+                        <ul class="treeview-menu">
 
                             <li class="{{ Request::routeIs('bank.*') ? 'active' : '' }}">
                                 <a href="{{ route('bank.index') }}"> <i class="fa fa-circle-o"></i>
@@ -145,9 +167,10 @@
                                 <a href="{{ route('units.index') }}"> <i class="fa fa-circle-o"></i>
                                     Units </a>
                             </li>
-                            
+
                             <li class="{{ Request::routeIs('categories.*') ? 'active' : '' }}">
-                                <a href="{{ route('categories.index') }}"><i class="fa fa-circle-o"></i> Categories</a>
+                                <a href="{{ route('categories.index') }}"><i class="fa fa-circle-o"></i>
+                                    Categories</a>
                             </li>
                             <li class="{{ Request::routeIs('products.*') ? 'active' : '' }}">
                                 <a href="{{ route('products.index') }}"><i class="fa fa-circle-o"></i> Products</a>

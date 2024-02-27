@@ -83,9 +83,9 @@ class BaseUnitController extends Controller
 
         $base_units = BaseUnit::findOrFail($id);
 
-        $data = $base_units->update($validatedData);
+        $updated = $base_units->update($validatedData);
 
-        if ($data) {
+        if ($updated) {
             session()->flash('successMessage', 'Base Unit was successfully updated.');
         } else {
             session()->flash('errorMessage', 'Base Unit update failed!');

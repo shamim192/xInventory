@@ -124,6 +124,34 @@ if ( ! function_exists('dateFormat')) {
     }
 }
 
+//Date Convert to DB Date Format
+if ( ! function_exists('dbDateFormat')) {
+    function dbDateFormat($date, $time = null)
+    {
+        if ($date != null) {
+            if ($time) {
+                return date('Y-m-d h:i A', strtotime($date));
+            } else {
+                return date('Y-m-d', strtotime($date));
+            }
+        }
+    }
+}
+
+//DB Date Format Retrieve to Form Input Format
+if ( ! function_exists('dbDateRetrieve')) {
+    function dbDateRetrieve($date, $time = null)
+    {
+        if ($date != null) {
+            if ($time) {
+                return date('d-m-Y h:i A', strtotime($date));
+            } else {
+                return date('d-m-Y', strtotime($date));
+            }
+        }
+    }
+}
+
 //Time Format
 if ( ! function_exists('timeFormat')) {
     function timeFormat($date)
