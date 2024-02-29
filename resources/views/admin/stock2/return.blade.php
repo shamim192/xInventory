@@ -5,18 +5,19 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li {{ isset($list) ? 'class=active' : '' }}>
-                    <a href="{{ route('stock-return.index') . qString() }}">
+                    <a href="{{ route('sale-return.index') . qString() }}">
                         <i class="fa fa-list" aria-hidden="true"></i> Return {{ __('lang.List') }}
                     </a>
                 </li>
-                @can('create stock_return')
+                @can('create sale_return')
                     <li {{ isset($create) ? 'class=active' : '' }}>
-                        <a href="{{ route('stock-return.create') . qString() }}">
+                        <a href="{{ route('sale-return.create') . qString() }}">
                             <i class="fa fa-plus" aria-hidden="true"></i> {{ __('lang.Add') }} Return
                         </a>
                     </li>
                 @endcan
-                @can('edit stock_return')
+
+                @can('edit sale_return')
                     @if (isset($edit))
                         <li class="active">
                             <a href="#">
@@ -25,7 +26,8 @@
                         </li>
                     @endif
                 @endcan
-                @can('show stock_return')
+
+                @can('show sale_return')
                     @if (isset($show))
                         <li class="active">
                             <a href="#">
@@ -42,9 +44,9 @@
                         <div class="box-body table-responsive">
                             <table class="table table-bordered">
                                 <tr>
-                                    <th style="width:170px;">Supplier</th>
+                                    <th style="width:170px;">Customer</th>
                                     <th style="width:10px;">:</th>
-                                    <td>{{ $data->supplier != null ? $data->supplier->name : '' }}</td>
+                                    <td>{{ $data->customer != null ? $data->customer->name : '' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Date</th>
@@ -52,19 +54,14 @@
                                     <td>{{ dateFormat($data->date) }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Stockin Date</th>
+                                    <th>Sale ID</th>
                                     <th>:</th>
-                                    <td>{{ dateFormat($data->stock->date) }}</td>
+                                    <td>{{ $data->sale->id }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Stockin Challan Number</th>
+                                    <th>Sale Date</th>
                                     <th>:</th>
-                                    <td>{{ $data->stock->challan_number }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Stockin Challan Date</th>
-                                    <th>:</th>
-                                    <td>{{ dateFormat($data->stock->challan_date) }}</td>
+                                    <td>{{ dateFormat($data->sale->date) }}</td>
                                 </tr>
                             </table>
 
@@ -107,7 +104,7 @@
                     <div class="tab-pane active">
                         <div class="box-body">
                             <form method="POST"
-                                action="{{ isset($edit) ? route('stock-return.update', $edit) : route('stock-return.store') }}{{ qString() }}"
+                                action="{{ isset($edit) ? route('sale-return.update', $edit) : route('sale-return.store') }}{{ qString() }}"
                                 id="are_you_sure" class="form-horizontal" enctype="multipart/form-data">
                                 @csrf
 
@@ -118,44 +115,43 @@
                                 <div class="row">
                                     <div class="col-sm-8">
                                         <div class="form-group">
-                                            <label class="control-label col-sm-3 required">Supplier :</label>
+                                            <label class="control-label col-sm-3 required">Customer :</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control select2" name="supplier_id" id="supplier_id" required
+                                                <select class="form-control select2" name="customer_id" id="customer_id" required
                                                     onchange="getStockIn()">
-                                                    <option value="">Select Supplier</option>
-                                                    @php($supplier_id = old('supplier_id', isset($data) ? $data->supplier_id : ''))
-                                                    @foreach ($suppliers as $supplier)
-                                                        <option value="{{ $supplier->id }}"
-                                                            {{ $supplier_id == $supplier->id ? 'selected' : '' }}>
-                                                            {{ $supplier->name }}</option>
+                                                    <option value="">Select Customer</option>
+                                                    @php($customer_id = old('customer_id', isset($data) ? $data->customer_id : ''))
+                                                    @foreach ($customers as $customer)
+                                                        <option value="{{ $customer->id }}"
+                                                            {{ $customer_id == $customer->id ? 'selected' : '' }}>
+                                                            {{ $customer->name }}</option>
                                                     @endforeach
                                                 </select>
 
-                                                @if ($errors->has('supplier_id'))
-                                                    <span class="help-block">{{ $errors->first('supplier_id') }}</span>
+                                                @if ($errors->has('customer_id'))
+                                                    <span class="help-block">{{ $errors->first('customer_id') }}</span>
                                                 @endif
                                             </div>
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('stock_id') ? ' has-error' : '' }}">
-                                            <label class="control-label col-sm-3 required">Stock In :</label>
+                                        <div class="form-group{{ $errors->has('sale_id') ? ' has-error' : '' }}">
+                                            <label class="control-label col-sm-3 required">Sale :</label>
                                             <div class="col-md-9">
-                                                <select class="form-control select2" name="stock_id" id="stock_id"
-                                                    onchange="stockItems()" required>
-                                                    <option value="">Select Stock In</option>
-                                                    @if (isset($stocks))
-                                                        @php($stock_id = old('stock_id', isset($data) ? $data->stock_id : ''))
-                                                        @foreach ($stocks as $stock)
-                                                            <option value="{{ $stock->id }}"
-                                                                {{ $stock_id == $stock->id ? 'selected' : '' }}>
-                                                                {{ $stock->challan_number ?? 'N/A' }} /
-                                                                {{ $stock->date }}</option>
+                                                <select class="form-control select2" name="sale_id" id="sale_id"
+                                                    onchange="saleItems()" required>
+                                                    <option value="">Select Sale</option>
+                                                    @if (isset($sales))
+                                                        @php($sale_id = old('sale_id', isset($data) ? $data->sale_id : ''))
+                                                        @foreach ($sales as $sale)
+                                                            <option value="{{ $sale->id }}"
+                                                                {{ $sale_id == $sale->id ? 'selected' : '' }}>
+                                                                #{{ $sale->id }} / {{ $sale->date }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
 
-                                                @if ($errors->has('stock_id'))
-                                                    <span class="help-block">{{ $errors->first('stock_id') }}</span>
+                                                @if ($errors->has('sale_id'))
+                                                    <span class="help-block">{{ $errors->first('sale_id') }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -183,7 +179,7 @@
                                                 <th>Product</th>
                                                 <th>Unit</th>
                                                 <th>U.P.</th>
-                                                <th>Stockin Qty</th>
+                                                <th>Sale Qty</th>
                                                 <th>Returned Qty</th>
                                                 <th>Rem. Qty</th>
                                                 <th class="required">Returning Qty</th>
@@ -192,17 +188,15 @@
                                         <tbody id="responseHtml">
                                             @foreach ($returnItems as $i => $item)
                                                 <tr>
-                                                    <td style="width: 20%;">
-                                                        <input type="hidden" name="category_id[]"
-                                                            value="{{ $item->category_id }}">
-                                                        <input type="text" class="form-control"
-                                                            value="{{ $item->category->name }}" readonly>
+                                                    <td style="width: 20%;">                                   
+                                                        <input type="hidden" name="category_id[]" value="{{$item->category_id}}">                                    
+                                                        <input type="text" class="form-control" value="{{$item->category->name}}" readonly>
                                                     </td>
                                                     <td>
-                                                        <input type="hidden" name="stock_return_item_id[]"
+                                                        <input type="hidden" name="sale_return_item_id[]"
                                                             value="{{ $item->id }}">
-                                                        <input type="hidden" name="stock_item_id[]"
-                                                            value="{{ $item->stock_item_id }}">
+                                                        <input type="hidden" name="sale_item_id[]"
+                                                            value="{{ $item->sale_item_id }}">
                                                         <input type="hidden" name="product_id[]"
                                                             value="{{ $item->product_id }}">
                                                         <input type="hidden" name="unit_id[]"
@@ -220,7 +214,7 @@
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-control"
-                                                            value="{{ $item->stock_quantity }}" readonly>
+                                                            value="{{ $item->sale_quantity }}" readonly>
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-control"
@@ -236,7 +230,7 @@
                                                         <input type="number" step="any" min="1"
                                                             class="form-control" name="quantity[]"
                                                             id="quantity{{ $i }}"
-                                                            onkeyup="chkQty({{ $i }})"
+                                                            onkeyUp="chkQty({{ $i }})"
                                                             value="{{ $item->quantity }}">
                                                     </td>
                                                 </tr>
@@ -269,7 +263,7 @@
                     </div>
                 @elseif (isset($list))
                     <div class="tab-pane active">
-                        <form method="GET" action="{{ route('stock-return.index') }}" class="form-inline">
+                        <form method="GET" action="{{ route('sale-return.index') }}" class="form-inline">
                             <div class="box-header text-right">
                                 <div class="row">
                                     <div class="form-group">
@@ -282,12 +276,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <select class="form-control" name="supplier">
-                                            <option value="">Any Supplier</option>
-                                            @foreach ($suppliers as $supplier)
-                                                <option value="{{ $supplier->id }}"
-                                                    {{ Request::get('supplier') == $supplier->id ? 'selected' : '' }}>
-                                                    {{ $supplier->name }}</option>
+                                        <select class="form-control" name="customer">
+                                            <option value="">Any Customer</option>
+                                            @foreach ($customers as $customer)
+                                                <option value="{{ $customer->id }}"
+                                                    {{ Request::get('customer') == $customer->id ? 'selected' : '' }}>
+                                                    {{ $customer->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -295,8 +289,7 @@
                                     <div class="form-group">
                                         <button type="submit"
                                             class="btn btn-info btn-flat">{{ __('lang.Search') }}</button>
-                                        <a class="btn btn-warning btn-flat"
-                                            href="{{ route('stock-return.index') }}">X</a>
+                                        <a class="btn btn-warning btn-flat" href="{{ route('sale-return.index') }}">X</a>
                                     </div>
                                 </div>
                             </div>
@@ -306,55 +299,47 @@
                             <table class="table table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th>Supplier</th>
+                                        <th>Customer</th>
                                         <th>Date</th>
-                                        <th>Challan Number</th>
-                                        <th>Challan Date</th>
                                         <th class="text-right">Quantity</th>
                                         <th class="text-right">Amount</th>
                                         <th class="col-action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($stockReturns as $val)
+                                    @foreach ($saleReturns as $val)
                                         <tr>
-                                            <td>{{ isset($val->supplier) ? $val->supplier->name : '' }}</td>
+                                            <td>{{ isset($val->customer) ? $val->customer->name : '' }}</td>
                                             <td>{{ dateFormat($val->date) }}</td>
-                                            <td>{{ $val->stock->challan_number ?? 'N/A' }}</td>
-                                            <td>{{ dateFormat($val->stock->challan_date) }}</td>
                                             <td class="text-right">{{ $val->items->sum('quantity') }} </td>
                                             <td class="text-right">{{ $val->items->sum('amount') }} </td>
                                             <td>
-                                                @canany([
-                                                    'show stock_return',
-                                                    'print stock_return',
-                                                    'edit stock_return',
-                                                    'delete
-                                                    stock_return',
-                                                    ])
+                                                @canany(['show sale_return', 'print sale_return', 'edit sale_return',
+                                                    'delete sale_return'])
                                                     <div class="dropdown">
                                                         <a class="btn btn-default btn-flat btn-xs dropdown-toggle"
                                                             type="button" data-toggle="dropdown">Action <span
                                                                 class="caret"></span></a>
                                                         <ul class="dropdown-menu dropdown-menu-right">
-                                                            @can('show stock_in')
-                                                                <li><a
-                                                                        href="{{ route('stock-return.show', $val->id) . qString() }}"><i
+                                                            @can('show sale_return')
+                                                                <li><a href="{{ route('sale-return.show', $val->id) . qString() }}"><i
                                                                             class="fa fa-eye"></i> Show</a></li>
                                                             @endcan
-                                                            {{-- @can('show stock_return')
+
+                                                            @can('print sale_return')
                                                                 <li><a
-                                                                        href="{{ route('stock-return.print', $val->id) . qString() }}"><i
+                                                                        href="{{ route('sale-return.print', $val->id) . qString() }}"><i
                                                                             class="fa fa-print"></i> Print</a></li>
-                                                            @endcan --}}
-                                                            @can('edit stock_return')
-                                                                <li><a
-                                                                        href="{{ route('stock-return.edit', $val->id) . qString() }}"><i
+                                                            @endcan
+
+                                                            @can('edit sale_return')
+                                                                <li><a href="{{ route('sale-return.edit', $val->id) . qString() }}"><i
                                                                             class="fa fa-pencil"></i> Edit</a></li>
                                                             @endcan
-                                                            @can('delete stock_return')
+
+                                                            @can('delete sale_return')
                                                                 <li><a
-                                                                        onclick="deleted('{{ route('stock-return.destroy', $val->id) . qString() }}')"><i
+                                                                        onclick="deleted('{{ route('sale-return.destroy', $val->id) . qString() }}')"><i
                                                                             class="fa fa-close"></i> Delete</a></li>
                                                             @endcan
                                                         </ul>
@@ -368,10 +353,10 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-4 pagi-msg">{!! pagiMsg($stockReturns) !!}</div>
+                            <div class="col-sm-4 pagi-msg">{!! pagiMsg($saleReturns) !!}</div>
 
                             <div class="col-sm-4 text-center">
-                                {{ $stockReturns->appends(Request::except('page'))->links() }}
+                                {{ $saleReturns->appends(Request::except('page'))->links() }}
                             </div>
 
                             <div class="col-sm-4">
@@ -400,37 +385,37 @@
 @section('scripts')
     <script>
         function getStockIn() {
-            var supplierId = $('#supplier_id').val();
+            var customerId = $('#customer_id').val();
             $.ajax({
                 type: "POST",
                 dataType: 'JSON',
-                url: "{{ route('supplier-wise-stock-ajax') }}",
+                url: "{{ route('customer-wise-sale-ajax') }}",
                 data: {
-                    'supplier_id': supplierId
+                    'customer_id': customerId
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(res) {
-                    var options = '<option value="">Select Stock In</option>';
+                    var options = '<option value="">Select Sale</option>';
                     if (res.status) {
-                        res.stocks.forEach((item, i) => {
-                            options += '<option value="' + item.id + '">' + item.challan_number +
-                                ' / ' + item.date + '</option>';
+                        res.sales.forEach((item, i) => {
+                            options += '<option value="' + item.id + '">#' + item.id + ' / ' + item
+                                .date + '</option>';
                         });
                     }
-                    $('#stock_id').html(options);
+                    $('#sale_id').html(options);
                 }
             });
         }
 
-        function stockItems() {
-            var stockId = $('#stock_id').val();
+        function saleItems() {
+            var saleId = $('#sale_id').val();
             $.ajax({
                 type: "POST",
-                url: "{{ route('stock-item-ajax') }}",
+                url: "{{ route('sale-item-ajax') }}",
                 data: {
-                    'stock_id': stockId,
+                    'sale_id': saleId,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -440,13 +425,13 @@
                     if (res.status) {
                         res.items.forEach((item, i) => {
                             html += `<tr>
-                                <td style="width: 20%;">                                   
+                                <td style="width: 20%;">                                    
                                     <input type="hidden" name="category_id[]" value="${item.category_id}">                                    
                                     <input type="text" class="form-control" value="${item.category.name}" readonly>
                                 </td>
                                 <td>
-                                    <input type="hidden" name="stock_return_item_id[]" value="${item.id}">
-                                    <input type="hidden" name="stock_item_id[]" value="${item.stock_item_id}">
+                                    <input type="hidden" name="sale_return_item_id[]" value="${item.id}">
+                                    <input type="hidden" name="sale_item_id[]" value="${item.sale_item_id}">
                                     <input type="hidden" name="product_id[]" value="${item.product_id}">
                                     <input type="hidden" name="unit_id[]" value="${item.unit_id}">
                                     <input type="text" class="form-control" value="${item.product.name} (${item.product.code})" readonly>
@@ -458,7 +443,7 @@
                                     <input type="number" class="form-control" name="unit_price[]" value="${item.unit_price}" readonly>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control" value="${item.stock_quantity}" readonly>
+                                    <input type="number" class="form-control" value="${item.sale_quantity}" readonly>
                                 </td>
                                 <td>
                                     <input type="number" class="form-control" value="${item.returned_quantity}" readonly>
@@ -491,7 +476,8 @@
                 $('#quantity' + key).val('');
                 $('#quantity' + key).focus();
                 alerts('You are not allowed to input greater than remaining quantity!');
-            }          
+            }
+
             var totalQuantity = 0;
             $("input[id^='quantity']").each(function() {
                 totalQuantity += +$(this).val();

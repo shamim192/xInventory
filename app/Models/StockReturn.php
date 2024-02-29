@@ -13,6 +13,7 @@ class StockReturn extends Model
         'supplier_id', 'stock_id', 'date',
     ];
 
+  
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);

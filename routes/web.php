@@ -53,6 +53,18 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
         Route::post('stock-item-ajax', 'StockReturnController@stockItem')->name('stock-item-ajax');
         Route::resource('stock-return', 'StockReturnController');
     });
+
+    Route::group(['namespace' => 'Sale'], function () {
+        Route::get('sale/products-by-category/{category}', 'SaleController@getProductsByCategory');
+        Route::post('sale/customer-ajax', 'SaleController@ajaxStore')->name('sale.new-customer-ajex');
+        Route::get('sale/print/{id}', 'SaleController@prints')->name('sale.print');
+        Route::get('customer-last-discount', 'SaleController@customerLastDiscount')->name('sale.customer.last.discount');
+        Route::resource('sale', 'SaleController');
+        Route::post('customer-wise-sale-ajax', 'SaleReturnController@customerWiseSale')->name('customer-wise-sale-ajax');
+        Route::post('sale-item-ajax', 'SaleReturnController@saleItem')->name('sale-item-ajax');
+        Route::get('sale-return/print/{id}', 'SaleReturnController@prints')->name('sale-return.print');
+        Route::resource('sale-return', 'SaleReturnController');
+    });
     
 });
 

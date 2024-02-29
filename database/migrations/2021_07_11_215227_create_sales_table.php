@@ -25,8 +25,6 @@ class CreateSalesTable extends Migration
             $table->unsignedBigInteger('flat_discount_percent')->default(0);
             $table->decimal('flat_discount_amount', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2)->default(0);
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();           
         });
     }

@@ -11,7 +11,7 @@ class Sale extends Model
     use HasFactory;
 
     protected $fillable = [
-        'customer_id', 'transport_id', 'invoice_no', 'date', 'total_quantity', 'subtotal_amount', 'flat_discount_percent', 'flat_discount_amount', 'vat_percent', 'vat_amount', 'total_amount', 'created_by', 'updated_by',
+        'customer_id', 'invoice_no', 'date', 'total_quantity', 'subtotal_amount', 'flat_discount_percent', 'flat_discount_amount', 'vat_percent', 'vat_amount', 'total_amount',
     ];
 
     public function customer()

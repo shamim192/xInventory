@@ -38,4 +38,22 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class,'category_id');
     }
+    public static function getStock($id)
+    {
+        $data = Product::select(DB::raw("((IFNULL(A.inQty, 0) + IFNULL(D.inQty, 0)) - (IFNULL(B.outQty, 0) + IFNULL(C.outQty, 0))) AS stockQty"))
+            ->join(DB::raw("(SELECT product_id, SUM(actual_quantity) AS inQty FROM stock_items GROUP BY product_id) AS A"), function ($q) {
+                $q->on('A.product_id', '=', 'products.id');
+            })
+            ->leftJoin(DB::raw("(SELECT product_id, SUM(actual_quantity) AS outQty FROM stock_return_items GROUP BY product_id) AS B"), function ($q) {
+                $q->on('B.product_id', '=', 'products.id');
+            })
+            ->leftJoin(DB::raw("(SELECT product_id, SUM(actual_quantity) AS outQty FROM sale_items GROUP BY product_id) AS C"), function ($q) {
+                $q->on('C.product_id', '=', 'products.id');
+            })
+            ->leftJoin(DB::raw("(SELECT product_id, SUM(actual_quantity) AS inQty FROM sale_return_items GROUP BY product_id) AS D"), function ($q) {
+                $q->on('D.product_id', '=', 'products.id');
+            })
+            ->find($id);
+        return $data->stockQty;
+    }
 }

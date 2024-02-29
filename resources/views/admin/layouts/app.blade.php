@@ -120,6 +120,28 @@
                         </ul>
                     </li>
                     <li
+                            class="treeview {{ Request::routeIs('sale.*') || Request::routeIs('sale-return.*') ? 'active menu-open' : '' }}">
+                            <a href="#">
+                                <i class="fa fa-upload"></i>
+                                <span>Sales</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+
+                                    <li class="{{ Request::routeIs('sale.*') ? 'active' : '' }}">
+                                        <a href="{{ route('sale.index') }}"><i class="fa fa-circle-thin"
+                                            aria-hidden="true"></i>Sale</a>
+                                    </li>
+
+                                    <li class="{{ Request::routeIs('sale-return.*') ? 'active' : '' }}">
+                                        <a href="{{ route('sale-return.index') }}"><i class="fa fa-circle-thin"
+                                            aria-hidden="true"></i>Sale Return</a>
+                                    </li>
+                            </ul>
+                        </li>
+                    <li
                         class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*') ? 'active menu-open' : '' }}">
                         <a href="#">
                             <i class="fa fa-user"></i>
