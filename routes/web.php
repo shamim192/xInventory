@@ -36,6 +36,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
     Route::resource('customer', 'CustomerController');
     Route::get('suppliers/due', 'SupplierController@due')->name('suppliers.due');
     Route::resource('supplier', 'SupplierController');
+    Route::resource('investor', 'InvestorController');
+    Route::get('loanholders/due', 'LoanHolderController@due')->name('loanholders.due');
+    Route::resource('loan-holder', 'LoanHolderController');
 
     Route::resource('base-units', 'BaseUnitController');
     Route::resource('units', 'UnitController');

@@ -108,41 +108,41 @@
                         </a>
                         <ul class="treeview-menu">
 
-                                <li class="{{ Request::routeIs('stock.*') ? 'active' : '' }}">
-                                    <a href="{{ route('stock.index') }}"><i class="fa fa-circle-thin"
-                                            aria-hidden="true"></i>Stock In </a>
-                                </li>
+                            <li class="{{ Request::routeIs('stock.*') ? 'active' : '' }}">
+                                <a href="{{ route('stock.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Stock In </a>
+                            </li>
 
-                                <li class="{{ Request::routeIs('stock-return.*') ? 'active' : '' }}">
-                                    <a href="{{ route('stock-return.index') }}"><i class="fa fa-circle-thin"
-                                            aria-hidden="true"></i>Stock Return </a>
-                                </li>
+                            <li class="{{ Request::routeIs('stock-return.*') ? 'active' : '' }}">
+                                <a href="{{ route('stock-return.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Stock Return </a>
+                            </li>
                         </ul>
                     </li>
                     <li
-                            class="treeview {{ Request::routeIs('sale.*') || Request::routeIs('sale-return.*') ? 'active menu-open' : '' }}">
-                            <a href="#">
-                                <i class="fa fa-upload"></i>
-                                <span>Sales</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
+                        class="treeview {{ Request::routeIs('sale.*') || Request::routeIs('sale-return.*') ? 'active menu-open' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-upload"></i>
+                            <span>Sales</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
 
-                                    <li class="{{ Request::routeIs('sale.*') ? 'active' : '' }}">
-                                        <a href="{{ route('sale.index') }}"><i class="fa fa-circle-thin"
-                                            aria-hidden="true"></i>Sale</a>
-                                    </li>
+                            <li class="{{ Request::routeIs('sale.*') ? 'active' : '' }}">
+                                <a href="{{ route('sale.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Sale</a>
+                            </li>
 
-                                    <li class="{{ Request::routeIs('sale-return.*') ? 'active' : '' }}">
-                                        <a href="{{ route('sale-return.index') }}"><i class="fa fa-circle-thin"
-                                            aria-hidden="true"></i>Sale Return</a>
-                                    </li>
-                            </ul>
-                        </li>
+                            <li class="{{ Request::routeIs('sale-return.*') ? 'active' : '' }}">
+                                <a href="{{ route('sale-return.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Sale Return</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li
-                        class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*') ? 'active menu-open' : '' }}">
+                        class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*')|| Request::routeIs('investor.*') || Request::routeIs('loan-holder.*') ? 'active menu-open' : '' }}">
                         <a href="#">
                             <i class="fa fa-user"></i>
                             <span>User</span>
@@ -159,7 +159,14 @@
                                 <a href="{{ route('supplier.index') }}"><i class="fa fa-circle-thin"
                                         aria-hidden="true"></i>Suppliers</a>
                             </li>
-
+                            <li class="{{ Request::routeIs('investor.*') ? 'active' : '' }}">
+                                <a href="{{ route('investor.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Investors</a>
+                            </li>
+                            <li class="{{ Request::routeIs('loan-holder.*') ? 'active' : '' }}">
+                                <a href="{{ route('loan-holder.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Loan Holders</a>
+                            </li>
                             <li class="{{ Request::routeIs('user.*') ? 'active' : '' }}">
                                 <a href="{{ route('user.index') }}"><i class="fa fa-circle-thin"
                                         aria-hidden="true"></i>Users</a>
