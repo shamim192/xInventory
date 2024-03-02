@@ -17,7 +17,6 @@ class SaleReturnController extends Controller {
 
     public function index(Request $request)
     {
-        $this->authorize('list sale_return');
         $sql = SaleReturn::with(['customer', 'sale', 'items'])->orderBy('date', 'DESC');
 
         if ($request->customer) {
@@ -32,16 +31,16 @@ class SaleReturnController extends Controller {
             $sql->where('date', '<=', dbDateFormat($request->to));
         }
 
-        $saleReturns = $sql->paginate($request->limit ?? 15);
+        $records = $sql->latest('id')->paginate(paginateLimit());
+        $serial = pagiSerial($records);
         
         $customers = Customer::where('status', 'Active')->get();
 
-        return view('admin.sale.return', compact('saleReturns', 'customers'))->with('list', 1);
+        return view('admin.sale-return.index', compact('records','serial','customers'));
     }
 
     public function create()
     {
-        $this->authorize('create sale_return');
         $returnItems = [
             (object)[
                 'id' => null,
@@ -69,12 +68,11 @@ class SaleReturnController extends Controller {
         
         $customers = Customer::where('status', 'Active')->get();
 
-        return view('admin.sale.return', compact('returnItems', 'customers'))->with('create', 1);
+        return view('admin.sale-return.create', compact('returnItems', 'customers'));
     }
 
     public function store(Request $request)
     {
-        $this->authorize('create sale_return');
         $this->validate($request, [
             'customer_id' => 'required|integer',
             'sale_id' => 'required|integer',
@@ -92,6 +90,7 @@ class SaleReturnController extends Controller {
             'sale_id' => $request->sale_id,
             'date' => dbDateFormat($request->date),
         ];
+
         $data = SaleReturn::create($storeData);
 
         if ($request->only('sale_item_id')) {
@@ -120,55 +119,27 @@ class SaleReturnController extends Controller {
             SaleReturnItem::insert($itemData);
         }
 
-        if (env('DIRECT_PRINT') == 1) {
-            (new PrintController())->saleReturn($data);
-
-            $request->session()->flash('successMessage', 'Sale Return was successfully added!');
-            return redirect()->route('sale-return.create', qArray());
+        if ($data) {
+            session()->flash('successMessage', 'Sale Retrun was successfully added.');
         } else {
-            return redirect()->route('sale-return.print', $data->id);
-        }        
+            session()->flash('errorMessage', 'Sale Return saving failed!');
+        }
+
+        return redirect()->action([self::class, 'create'], qArray());
     }
 
     public function show(Request $request, $id)
-    {
-        $this->authorize('show sale_return');
+    {        
         $data = SaleReturn::with(['customer', 'sale', 'items'])->find($id);
-        if (empty($data)) {
-            $request->session()->flash('errorMessage', 'Data not found!');
-            return redirect()->route('sale-return.index', qArray());
-        }
-
-        return view('admin.sale.return', compact('data'))->with('show', $id);
+        return view('admin.sale-return.show', compact('data'))->with('show', $id);
     }
 
-    public function prints(Request $request, $id)
-    {
-        $this->authorize('print sale_return');
-        $data = SaleReturn::with(['customer', 'sale', 'items'])->find($id);
-        if (empty($data)) {
-            $request->session()->flash('errorMessage', 'Data not found!');
-            return redirect()->route('sale-return.index', qArray());
-        }
-
-        if (env('DIRECT_PRINT') == 1) {
-            (new PrintController())->saleReturn($data);
-            return redirect()->back();
-        } else {
-            return view('admin.sale.print.sale-return-print', compact('data'));
-        }
-    }
 
     public function edit(Request $request, $id)
     {
-        $this->authorize('edit sale_return');
         $data = SaleReturn::find($id);
-        if (empty($data)) {
-            $request->session()->flash('errorMessage', 'Data not found!');
-            return redirect()->route('sale-return.index', qArray());
-        }
 
-        $returnItems = SaleItem::with('product', 'unit','category')
+        $returnItems = SaleItem::with(['product', 'unit','category'])
         ->select('sale_items.id AS sale_item_id','sale_items.category_id', 'sale_items.product_id', 'sale_items.unit_id', 'sale_items.unit_price', 'sale_items.quantity AS sale_quantity', 'A.returned_quantity', DB::raw('(sale_items.quantity -IFNULL(A.returned_quantity, 0)) AS remain_quantity'), 'B.id', 'B.quantity AS quantity')
         ->leftJoin(DB::raw("(SELECT sale_item_id, SUM(quantity) AS returned_quantity FROM sale_return_items WHERE sale_return_id!=".$id." GROUP BY sale_item_id) AS A"), 'sale_items.id', '=', 'A.sale_item_id')
         ->where('sale_items.sale_id', $data->sale_id)
@@ -181,12 +152,11 @@ class SaleReturnController extends Controller {
         $customers = Customer::where('status', 'Active')->get();
         $sales = Sale::select('id', 'date')->where('customer_id', $data->customer_id)->get();
 
-        return view('admin.sale.return', compact('data', 'returnItems', 'customers', 'sales'))->with('edit', $id);
+        return view('admin.sale-return.edit', compact('data', 'returnItems', 'customers', 'sales'));
     }
 
     public function update(Request $request, $id)
     {
-        $this->authorize('edit sale_return');
         $this->validate($request, [
             'customer_id' => 'required|integer',
             'sale_id' => 'required|integer',
@@ -200,10 +170,6 @@ class SaleReturnController extends Controller {
         ]);
 
         $data = SaleReturn::find($id);
-        if (empty($data)) {
-            $request->session()->flash('errorMessage', 'Data not found!');
-            return redirect()->route('sale-return.index', qArray());
-        }
 
         $storeData = [
             'customer_id' => $request->customer_id,
@@ -211,7 +177,7 @@ class SaleReturnController extends Controller {
             'date' => dbDateFormat($request->date),
         ];
 
-        $data->update($storeData);
+       $updated = $data->update($storeData);
 
         if ($request->only('sale_item_id')) {
             SaleReturnItem::where('sale_id', $data->id)->whereNotIn('id', $request->sale_return_item_id)->delete();
@@ -242,30 +208,25 @@ class SaleReturnController extends Controller {
             }
         }
 
-        if (env('DIRECT_PRINT') == 1) {
-            (new PrintController())->saleReturn($data);
-
-            $request->session()->flash('successMessage', 'Sale Return was successfully updated!');
-            return redirect()->route('sale-return.index', qArray());
+        if ($updated) {
+            session()->flash('successMessage', 'Sale Retrun was successfully updated.');
         } else {
-            return redirect()->route('sale-return.print', $data->id);
-        } 
+            session()->flash('errorMessage', 'Sale Return updating failed!');
+        }
+
+        return redirect()->action([self::class, 'create'], qArray());
     }
 
     public function destroy(Request $request, $id)
     {
-        $this->authorize('delete sale_return');
         $data = SaleReturn::find($id);
-        if (empty($data)) {
-            $request->session()->flash('errorMessage', 'Data not found!');
-            return redirect()->route('sale-return.index', qArray());
-        }
 
         SaleReturnItem::where('sale_id', $id)->delete();
         $data->delete();
         
-        $request->session()->flash('successMessage', 'Sale Return was successfully deleted!');
-        return redirect()->route('sale-return.index', qArray());
+        session()->flash('successMessage', 'Sale Return was successfully deleted!');
+
+        return redirect()->action([self::class, 'index'], qArray());
     }
     
     public function customerWiseSale(Request $request)

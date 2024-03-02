@@ -23,14 +23,4 @@ class Sale extends Model
     {
         return $this->hasMany(SaleItem::class, 'sale_id', 'id');
     }
-
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updater()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
 }

@@ -26,19 +26,19 @@ class SaleController extends Controller
 
         if ($request->q) {
             $sql->where(function ($q) use ($request) {
-                $q->where('invoice_no', 'LIKE', '%'. $request->q . '%')
-                    ->orWhere('date', 'LIKE', '%'. $request->q . '%')
-                    ->orWhere('total_quantity', 'LIKE', '%'. $request->q . '%')
-                    ->orWhere('total_amount', 'LIKE', '%'. $request->q . '%');
+                $q->where('invoice_no', 'LIKE', '%' . $request->q . '%')
+                    ->orWhere('date', 'LIKE', '%' . $request->q . '%')
+                    ->orWhere('total_quantity', 'LIKE', '%' . $request->q . '%')
+                    ->orWhere('total_amount', 'LIKE', '%' . $request->q . '%');
             });
-            $sql->orwhereHas('customer', function($q) use($request) {
-                $q->where('name', 'LIKE','%'. $request->q . '%');
+            $sql->orwhereHas('customer', function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->q . '%');
             });
-            $sql->orwhereHas('items.category', function($q) use($request) {
-                $q->where('name', 'LIKE','%'. $request->q . '%');
+            $sql->orwhereHas('items.category', function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->q . '%');
             });
-            $sql->orwhereHas('items.product', function($q) use($request) {
-                $q->where('name', 'LIKE','%'. $request->q . '%');
+            $sql->orwhereHas('items.product', function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->q . '%');
             });
         }
 
@@ -59,7 +59,7 @@ class SaleController extends Controller
 
         $customers = Customer::where('status', 'Active')->get();
 
-        return view('admin.sale.index', compact('records','serial', 'customers'));
+        return view('admin.sale.index', compact('records', 'serial', 'customers'));
     }
 
     public function create()
@@ -79,8 +79,8 @@ class SaleController extends Controller
         ];
 
         $customers = Customer::where('status', 'Active')->get();
-        $products = Product::where('status', 'Active')->get(); 
-        $categories = Category::with('products', 'children.products')->where('status', 'Active')->get();       
+        $products = Product::where('status', 'Active')->get();
+        $categories = Category::with('products', 'children.products')->where('status', 'Active')->get();
         $units = Unit::where('status', 'Active')->get();
         $banks = Bank::where('status', 'Active')->get();
 
@@ -123,14 +123,14 @@ class SaleController extends Controller
                     $flatDiscountAmt = ($request->flat_discount_percentage * $price) / 100;
                     $netPrice = ($price - $flatDiscountAmt);
                     $netUnitPrice = ($netPrice / $request->quantity[$key]);
-                    $unit = Unit::find($request->unit_id[$key]);                
+                    $unit = Unit::find($request->unit_id[$key]);
                     $itemData[] = [
                         'sale_id' => $data->id,
                         'category_id' => $request->category_id[$key],
                         'product_id' => $request->product_id[$key],
                         'unit_id' => $request->unit_id[$key],
                         'unit_quantity' => $unit->quantity,
-                        'quantity' => $request->quantity[$key],                   
+                        'quantity' => $request->quantity[$key],
                         'unit_price' => $request->unit_price[$key],
                         'discount_percentage' => $request->discount_percentage[$key] ?? 0,
                         'discount_amount' => $discountAmount ?? 0,
@@ -172,11 +172,18 @@ class SaleController extends Controller
             }
 
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
         }
+
+        if ($data) {
+            session()->flash('successMessage', 'Sale was successfully added.');
+        } else {
+            session()->flash('errorMessage', 'Sale saving failed!');
+        }
+
+        return redirect()->action([self::class, 'create'], qArray());
     }
     public function ajaxStore(Request $request)
     {
@@ -189,7 +196,7 @@ class SaleController extends Controller
             'date_of_birth' => 'nullable|date',
             'shop_name' => 'nullable|max:255',
             'status' => 'required|in:Active,Inactive',
-        ]);     
+        ]);
 
         Customer::create($validatedData);
 
@@ -200,14 +207,14 @@ class SaleController extends Controller
     {
 
         $data = Sale::select('sales.*', 'transactions.bank_id', 'customer_payments.amount AS paid_amount')->with('items')
-        ->leftJoin('customer_payments', function ($q) {
-            $q->on('customer_payments.sale_id', '=', 'sales.id');               
-        })
-        ->leftJoin('transactions', function ($q) {
-            $q->on('transactions.flagable_id', '=', 'customer_payments.id');               
-            $q->where('transactions.flag', 'Customer Payment');               
-        })
-        ->find($id);
+            ->leftJoin('customer_payments', function ($q) {
+                $q->on('customer_payments.sale_id', '=', 'sales.id');
+            })
+            ->leftJoin('transactions', function ($q) {
+                $q->on('transactions.flagable_id', '=', 'customer_payments.id');
+                $q->where('transactions.flag', 'Customer Payment');
+            })
+            ->find($id);
 
         return view('admin.sale.show', compact('data'));
     }
@@ -216,14 +223,13 @@ class SaleController extends Controller
     {
         $data = Sale::select('sales.*', 'transactions.bank_id', 'customer_payments.amount AS paid_amount')->with('items')
             ->leftJoin('customer_payments', function ($q) {
-                $q->on('customer_payments.sale_id', '=', 'sales.id');               
+                $q->on('customer_payments.sale_id', '=', 'sales.id');
             })
             ->leftJoin('transactions', function ($q) {
-                $q->on('transactions.flagable_id', '=', 'customer_payments.id');               
-                $q->where('transactions.flag', 'Customer Payment');               
+                $q->on('transactions.flagable_id', '=', 'customer_payments.id');
+                $q->where('transactions.flag', 'Customer Payment');
             })
             ->find($id);
-
         if ($data->items != null) {
             $items = $data->items;
         } else {
@@ -243,12 +249,12 @@ class SaleController extends Controller
         }
 
         $customers = Customer::where('status', 'Active')->get();
-        $categories = Category::with('products', 'children.products')->where('status', 'Active')->get();  
-        $products = Product::where('status', 'Active')->get();        
+        $categories = Category::with('products', 'children.products')->where('status', 'Active')->get();
+        $products = Product::where('status', 'Active')->get();
         $units = Unit::where('status', 'Active')->get();
         $banks = Bank::where('status', 'Active')->get();
 
-        return view('admin.sale.edit', compact('data', 'items', 'customers','transports', 'categories', 'products', 'units', 'banks'));
+        return view('admin.sale.edit', compact('data', 'items', 'customers', 'categories', 'products', 'units', 'banks'))->with('edit', $id);
     }
 
     public function update(SaleRequest $request, $id)
@@ -263,6 +269,7 @@ class SaleController extends Controller
 
         $storeData = [
             'customer_id' => $request->customer_id,
+            'transport_id' => $request->transport_id,
             'date' => dbDateFormat($request->date),
             'total_quantity' => $request->total_quantity ?? 0,
             'subtotal_amount' => $request->subtotal_amount ?? 0,
@@ -273,7 +280,7 @@ class SaleController extends Controller
             'total_amount' => $request->total_amount ?? 0,
         ];
 
-      $updated =  $data->update($storeData);
+        $updated =  $data->update($storeData);
 
         if ($request->only('sale_item_id')) {
             SaleItem::where('sale_id', $data->id)->whereNotIn('id', $request->sale_item_id)->delete();
@@ -312,7 +319,6 @@ class SaleController extends Controller
         if ($request->paid_amount > 0) {
             $paidData = [
                 'customer_id' => $data->customer_id,
-                'bank_id' => $request->bank_id,
                 'type' => 'Received',
                 'date' => dbDateFormat($data->date),
                 'note' => null,
@@ -327,7 +333,7 @@ class SaleController extends Controller
                 ], [
                     'type' => 'Received',
                     'flag' => 'Customer Payment',
-                    'bank_id' => $payment->bank_id,
+                    'bank_id' =>  $request->bank_id,
                     'datetime' => now(),
                     'note' => $payment->note,
                     'amount' => $payment->amount,
@@ -348,11 +354,10 @@ class SaleController extends Controller
         }
 
         return redirect()->action([self::class, 'index'], qArray());
-
     }
 
     public function destroy($id)
-    {        
+    {
         $data = Sale::find($id);
 
         $payment = CustomerPayment::where('sale_id', $id)->first();
@@ -374,11 +379,11 @@ class SaleController extends Controller
     public function customerLastDiscount(Request $request)
     {
         $sales = Sale::select('sale_items.discount_percentage', 'sale_items.discount_amount')
-        ->join('sale_items', 'sales.id', '=', 'sale_items.sale_id')
-        ->where('sales.customer_id', $request->customer_id)
-        ->where('sale_items.product_id', $request->product_id)
-        ->orderBy('sales.id', 'desc')
-        ->first();
+            ->join('sale_items', 'sales.id', '=', 'sale_items.sale_id')
+            ->where('sales.customer_id', $request->customer_id)
+            ->where('sale_items.product_id', $request->product_id)
+            ->orderBy('sales.id', 'desc')
+            ->first();
         if ($sales) {
             return response()->json(['success' => true, 'data' => $sales]);
         } else {
@@ -386,7 +391,8 @@ class SaleController extends Controller
         }
     }
 
-    public function getProductsByCategory($category){
+    public function getProductsByCategory($category)
+    {
 
         $product = Product::with(['baseUnit.units'])->select('products.*', DB::raw("((IFNULL(A.inQty, 0) + IFNULL(D.inQty, 0)) - (IFNULL(B.outQty, 0) + IFNULL(C.outQty, 0))) AS stockQty"))
             ->join(DB::raw("(SELECT product_id, SUM(actual_quantity) AS inQty FROM stock_items GROUP BY product_id) AS A"), function ($q) {
@@ -404,15 +410,14 @@ class SaleController extends Controller
             ->where('products.category_id', $category)
             ->where('status', 'Active')
             ->having('stockQty', '>', 0)
-            ->get();            
+            ->get();
 
         if (!$product) {
             return response()->json(['error' => 'Product not found'], 404);
         }
-         
+
         return response()->json([
             'products' => $product,
-        ]);   
+        ]);
     }
-
 }

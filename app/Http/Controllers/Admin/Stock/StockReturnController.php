@@ -139,7 +139,7 @@ class StockReturnController extends Controller
     {
         $data = StockReturn::find($id);
 
-        $returnItems = StockItem::with('product', 'unit', 'category')
+        $returnItems = StockItem::with(['product', 'unit', 'category'])
             ->select('stock_items.id AS stock_item_id', 'stock_items.category_id', 'stock_items.product_id', 'stock_items.unit_id', 'stock_items.unit_price', 'stock_items.quantity AS stock_quantity', 'A.returned_quantity', DB::raw('(stock_items.quantity -IFNULL(A.returned_quantity, 0)) AS remain_quantity'), 'B.id', 'B.quantity AS quantity')
             ->leftJoin(DB::raw("(SELECT stock_item_id, SUM(quantity) AS returned_quantity FROM stock_return_items WHERE stock_return_id!=" . $id . " GROUP BY stock_item_id) AS A"), 'stock_items.id', '=', 'A.stock_item_id')
             ->where('stock_items.stock_id', $data->stock_id)
@@ -178,6 +178,7 @@ class StockReturnController extends Controller
         ];
 
        $updated = $data->update($storeData);
+       
        if ($request->only('stock_item_id')) {
         StockReturnItem::where('stock_id', $data->id)->whereNotIn('id', $request->stock_return_item_id)->delete();
         foreach ($request->stock_return_item_id as $key => $row) {

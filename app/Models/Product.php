@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Product extends Model
 {
@@ -28,16 +29,11 @@ class Product extends Model
         return $this->belongsTo(BaseUnit::class, 'base_unit_id');
     }
 
-    public function units()
-    {
-       $data = Unit::where('base_unit_id', $this->base_unit_id)->get(); 
-        return $data;
-    }
-
     public function category()
     {
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
+
     public static function getStock($id)
     {
         $data = Product::select(DB::raw("((IFNULL(A.inQty, 0) + IFNULL(D.inQty, 0)) - (IFNULL(B.outQty, 0) + IFNULL(C.outQty, 0))) AS stockQty"))

@@ -108,7 +108,7 @@
                                 @endforeach
                             @endif
                         </select>
-                    </td>
+                    </td> 
                     <td>
                         <input type="hidden" id="stock{{ $key }}"
                             value="{{ isset($edit) ? $item->product->getStock($item->product_id) + $item->actual_quantity : 0 }}">
