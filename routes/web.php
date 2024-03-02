@@ -45,6 +45,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
     Route::resource('categories', 'CategoryController');
     Route::resource('products', 'ProductController');
     
+    Route::get('banks/due', 'BankController@due')->name('banks.due');
     Route::resource('bank', 'BankController');
 
     Route::group(['namespace' => 'Stock'], function () {
@@ -60,13 +61,26 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
     Route::group(['namespace' => 'Sale'], function () {
         Route::get('sale/products-by-category/{category}', 'SaleController@getProductsByCategory');
         Route::post('sale/customer-ajax', 'SaleController@ajaxStore')->name('sale.new-customer-ajex');
-        Route::get('sale/print/{id}', 'SaleController@prints')->name('sale.print');
         Route::get('customer-last-discount', 'SaleController@customerLastDiscount')->name('sale.customer.last.discount');
         Route::resource('sale', 'SaleController');
         Route::post('customer-wise-sale-ajax', 'SaleReturnController@customerWiseSale')->name('customer-wise-sale-ajax');
         Route::post('sale-item-ajax', 'SaleReturnController@saleItem')->name('sale-item-ajax');
-        Route::get('sale-return/print/{id}', 'SaleReturnController@prints')->name('sale-return.print');
         Route::resource('sale-return', 'SaleReturnController');
+    });
+
+    Route::group(['namespace' => 'Payment'], function () {
+
+        Route::resource('income', 'IncomeController');
+        Route::resource('expense', 'ExpenseController');
+        Route::resource('fund-transfer', 'FundTransferController');
+        Route::resource('invest', 'InvestController');
+        Route::resource('loan', 'LoanController');
+        Route::get('supplier-payments/adjustment', 'SupplierPaymentController@adjustment')->name('supplier-payments.adjustment');
+        Route::resource('supplier-payments', 'SupplierPaymentController');
+        Route::get('customer-payments/adjustment', 'CustomerPaymentController@adjustment')->name('customer-payments.adjustment');
+        Route::resource('customer-payments', 'CustomerPaymentController');
+        Route::get('loan-payments/adjustment', 'LoanPaymentController@adjustment')->name('loan-payments.adjustment');
+        Route::resource('loan-payments', 'LoanPaymentController');
     });
     
 });

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Bank;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class BankController extends Controller
 {
@@ -107,5 +109,21 @@ class BankController extends Controller
         }
 
         return redirect()->action([self::class, 'index'], qArray());
+    }
+    public function due(Request $request)
+    {
+        $credentials = $request->only('id');
+        $validator = Validator::make($credentials, [
+            'id' => 'required|integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => implode(", " , $validator->messages()->all())], 200);
+        }
+
+        $receivedAmount = Transaction::where('type', 'Received')->where('bank_id', $request->id)->sum('amount');
+        $paymentAmount = Transaction::where('type', 'Payment')->where('bank_id', $request->id)->sum('amount');
+        $due = ($receivedAmount - $paymentAmount);
+
+        return response()->json(['success' => true, 'due' => $due]);
     }
 }

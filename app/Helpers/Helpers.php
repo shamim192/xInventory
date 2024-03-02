@@ -49,6 +49,28 @@ if (!function_exists('pagiSerial')) {
     }
 }
 
+//Pagination Message...
+if ( ! function_exists('pagiMsg')) {
+    function pagiMsg($data)
+    {
+        $msg = 'Showing ';
+        $msg .= (($data->currentPage()*$data->perPage())-$data->perPage())+1;
+        $msg .= ' to ';
+        $msg .= ($data->currentPage()*$data->perPage()>$data->total()) ? $data->total() : $data->currentPage()*$data->perPage().' of '.$data->total();
+        $msg .= ' row(s)';
+
+        return $msg;
+    }
+}
+
+//Pagination per page
+if ( ! function_exists('paginations')) {
+    function paginations()
+    {
+        return ['15', '25', '50', '100'];
+    }
+}
+
 //url with query string
 if ( ! function_exists('qUrl')) {
     function qUrl($queryArr = null, $route = null)
