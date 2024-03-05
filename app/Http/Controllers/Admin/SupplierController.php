@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Supplier;
+use App\Services\SupplierService;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -109,5 +110,12 @@ class SupplierController extends Controller
         }
 
         return redirect()->action([self::class, 'index'], qArray());
+    }
+
+    public function due(Request $request)
+    {
+        $due = SupplierService::due($request->id);
+
+        return response()->json(['success' => true, 'due' => $due]);
     }
 }

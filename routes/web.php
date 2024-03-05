@@ -19,14 +19,14 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/','App\Http\Controllers\Auth\LoginController@showLoginForm');
+Route::get('/', 'App\Http\Controllers\Auth\LoginController@showLoginForm');
 
-Auth::routes(['verify' => true, 'register' =>false]);
+Auth::routes(['verify' => true, 'register' => false]);
 
-Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'verified']], function () {    
-    Route::get('dashboard','DashboardController@index')->name('dashboard');
+Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'verified']], function () {
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
-    Route::get('profile','ProfileController@index')->name('profile');
+    Route::get('profile', 'ProfileController@index')->name('profile');
     Route::post('profile', 'ProfileController@update');
     Route::get('profile/password', 'ProfileController@password')->name('profile.password');
     Route::post('profile/password', 'ProfileController@passwordUpdate');
@@ -44,7 +44,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
     Route::resource('units', 'UnitController');
     Route::resource('categories', 'CategoryController');
     Route::resource('products', 'ProductController');
-    
+    Route::resource('income-category', 'Income\IncomeCategoryController');
+    Route::resource('expense-category', 'Expense\CategoryController');
+
     Route::get('banks/due', 'BankController@due')->name('banks.due');
     Route::resource('bank', 'BankController');
 
@@ -79,9 +81,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
         Route::resource('supplier-payments', 'SupplierPaymentController');
         Route::get('customer-payments/adjustment', 'CustomerPaymentController@adjustment')->name('customer-payments.adjustment');
         Route::resource('customer-payments', 'CustomerPaymentController');
-        Route::get('loan-payments/adjustment', 'LoanPaymentController@adjustment')->name('loan-payments.adjustment');
-        Route::resource('loan-payments', 'LoanPaymentController');
+        Route::get('loan-holder-payments/adjustment', 'LoanHolderPaymentController@adjustment')->name('loan-holder-payments.adjustment');
+        Route::resource('loan-holder-payments', 'LoanHolderPaymentController');
     });
-    
 });
-

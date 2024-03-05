@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Services\CustomerService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -111,5 +113,12 @@ class CustomerController extends Controller
         }
 
         return redirect()->action([self::class, 'index'], qArray());
+    }
+
+    public function due(Request $request)
+    {
+        $due = CustomerService::due($request->id);
+
+        return response()->json(['success' => true, 'due' => $due]);
     }
 }

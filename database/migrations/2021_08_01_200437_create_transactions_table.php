@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->enum('type', ['Received', 'Payment','Adjustment']);
-            $table->enum('flag', ['Invest', 'Expense', 'Supplier Payment', 'Customer Payment', 'Transfer','Income','Loan']);
+            $table->enum('flag', ['Invest', 'Expense', 'Supplier Payment', 'Customer Payment', 'Fund Transfer','Income','Loan']);
             $table->unsignedBigInteger('flagable_id');
             $table->string('flagable_type');           
             $table->foreignId('bank_id')->constrained('banks')->cascadeOnDelete(); 

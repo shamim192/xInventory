@@ -123,14 +123,6 @@ class LoanHolderController extends Controller
     
     public function due(Request $request)
     {
-        $credentials = $request->only('id');
-        $validator = Validator::make($credentials, [
-            'id' => 'required|integer',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => implode(", " , $validator->messages()->all())], 200);
-        }
-
         $due = LoanHolderService::due($request->id);
 
         return response()->json(['success' => true, 'due' => $due]);

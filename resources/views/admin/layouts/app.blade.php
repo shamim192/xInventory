@@ -142,7 +142,52 @@
                         </ul>
                     </li>
                     <li
-                        class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*')|| Request::routeIs('investor.*') || Request::routeIs('loan-holder.*') ? 'active menu-open' : '' }}">
+                        class="treeview {{ Request::routeIs('expense.*') || Request::routeIs('income.*') || Request::routeIs('supplier-payments.*') || Request::routeIs('customer-payments.*') || Request::routeIs('fund-transfer.*') || Request::routeIs('invest.*') || Request::routeIs('loan-holder-payments.*') ? 'active menu-open' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-money"></i>
+                            <span>Payment</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{ Request::routeIs('invest.*') ? 'active' : '' }}">
+                                <a href="{{ route('invest.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Invest
+                                </a>
+                            </li>
+                            <li class="{{ Request::routeIs('customer-payments.*') ? 'active' : '' }}">
+                                <a href="{{ route('customer-payments.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>
+                                    Customer Payment</a>
+                            </li>
+                            <li class="{{ Request::routeIs('supplier-payments.*') ? 'active' : '' }}">
+                                <a href="{{ route('supplier-payments.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>
+                                    Supplier Payment</a>
+                            </li>
+                            <li class="{{ Request::routeIs('loan-holder-payments.*') ? 'active' : '' }}">
+                                <a href="{{ route('loan-holder-payments.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i> Loan Holder Payment</a>
+                            </li>
+                            <li class="{{ Request::routeIs('fund-transfer.*') ? 'active' : '' }}">
+                                <a href="{{ route('fund-transfer.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i> Fund Transfer
+                                </a>
+                            </li>
+                            <li class="{{ Request::routeIs('income.*') ? 'active' : '' }}">
+                                <a href="{{ route('income.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i> Income </a>
+                            </li>
+                            <li class="{{ Request::routeIs('expense.*') ? 'active' : '' }}">
+                                <a href="{{ route('expense.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>
+                                    Expense </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li
+                        class="treeview {{ Request::routeIs('user.*') || Request::routeIs('customer.*') || Request::routeIs('supplier.*') || Request::routeIs('investor.*') || Request::routeIs('loan-holder.*') ? 'active menu-open' : '' }}">
                         <a href="#">
                             <i class="fa fa-user"></i>
                             <span>User</span>
@@ -174,7 +219,7 @@
                         </ul>
                     </li>
                     <li
-                        class="treeview {{ Request::routeIs('base-units.*') || Request::routeIs('units.*') || Request::routeIs('categories.*') || Request::routeIs('bank.*') || Request::routeIs('products.*') ? 'active menu-open' : '' }}">
+                        class="treeview {{ Request::routeIs('base-units.*') || Request::routeIs('units.*') || Request::routeIs('categories.*') || Request::routeIs('bank.*') || Request::routeIs('products.*') || Request::routeIs('income-category.*') || Request::routeIs('expense-category.*') ? 'active menu-open' : '' }}">
                         <a href="#">
                             <i class="fa fa-cog"></i>
                             <span>Setting</span>
@@ -203,6 +248,14 @@
                             </li>
                             <li class="{{ Request::routeIs('products.*') ? 'active' : '' }}">
                                 <a href="{{ route('products.index') }}"><i class="fa fa-circle-o"></i> Products</a>
+                            </li>
+                            <li class="{{ Request::routeIs('income-category.*') ? 'active' : '' }}">
+                                <a href="{{ route('income-category.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Income Heads</a>
+                            </li>
+                            <li class="{{ Request::routeIs('expense-category.*') ? 'active' : '' }}">
+                                <a href="{{ route('expense-category.index') }}"><i class="fa fa-circle-thin"
+                                        aria-hidden="true"></i>Expense Heads</a>
                             </li>
                         </ul>
                     </li>
