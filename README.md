@@ -1,4 +1,4 @@
-# ![Inventory Management System](logo.png)
+# Inventory Management System - xInventory
 
 ----------
 
@@ -49,3 +49,6 @@ password: 12345678
 
 **you can change it from database as per your need.
 
+## Log In page
+
+# ![Log In Page](public/assets/images/login.png)
