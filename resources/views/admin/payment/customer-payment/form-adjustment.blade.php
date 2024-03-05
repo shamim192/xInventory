@@ -87,7 +87,7 @@
                 if (res.success) {
                     if (isEdit) {
                         let totalAmount = Number($('#total_amount').val());
-                        let due = (Number(res.due) - totalAmount);
+                        let due = (Number(res.due) + totalAmount);
                         $('#balance').val(due);
                         $('#final_balance').val(res.due);
                     } else {
@@ -113,7 +113,7 @@
         }
 
         let balance = Number($(`#balance`).val());
-        let finalBalance = (balance + totalAmount);
+        let finalBalance = (balance - totalAmount);
         if (finalBalance < 0) {
             $(`#total_amount`).val('');
             $(`#final_balance`).val('');

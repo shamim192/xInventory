@@ -10,8 +10,9 @@ class CustomerService
     public static function due($customerId)
     {        
         $customer = Customer::select(
-            DB::raw("((IFNULL(A.amount, 0) + IFNULL(D.outAmount, 0)) - (IFNULL(C.inAmount, 0) + IFNULL(B.amount, 0))) AS due")
+            DB::raw("((IFNULL(A.amount, 0) - IFNULL(B.amount, 0)) + (IFNULL(C.inAmount, 0) - IFNULL(D.outAmount, 0))) AS due")
         )
+
         ->leftJoin(DB::raw("(SELECT customer_id, SUM(total_amount) AS amount FROM sales GROUP BY customer_id) AS A"), function($q) {
             $q->on('customers.id', '=', 'A.customer_id');
         })
@@ -20,10 +21,11 @@ class CustomerService
             $q->on('B.customer_id', '=', 'customers.id');
         })
 
-        ->leftJoin(DB::raw("(SELECT customer_id, SUM(amount) AS inAmount FROM `customer_payments` WHERE type='Received' GROUP BY customer_id) AS C"), function ($q) {
+        ->leftJoin(DB::raw("(SELECT customer_id, SUM(amount) AS inAmount FROM `customer_payments` WHERE type='Payment' GROUP BY customer_id) AS C"), function ($q) {
             $q->on('C.customer_id', '=', 'customers.id');
         })
-        ->leftJoin(DB::raw("(SELECT customer_id, SUM(amount) AS outAmount FROM `customer_payments` WHERE type !='Received' GROUP BY customer_id) AS D"), function ($q) {
+
+        ->leftJoin(DB::raw("(SELECT customer_id, SUM(amount) AS outAmount FROM `customer_payments` WHERE type !='Payment' GROUP BY customer_id) AS D"), function ($q) {
             $q->on('D.customer_id', '=', 'customers.id');
         })
 
