@@ -7,23 +7,27 @@
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('supplier-payments.index') . qString() }}">
-                            <i class="fa fa-list" aria-hidden="true"></i> Supplier Payment List
+                            <i class="fas fa-list" aria-hidden="true"></i> Supplier Payment List
                         </a>
                     </li>
+
+                    @can('add supplier_payment')
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="{{ route('supplier-payments.create') . qString() }}">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Supplier Payment
+                                <i class="fas fa-plus" aria-hidden="true"></i> Add Supplier Payment
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="{{ route('supplier-payments.adjustment') . qString() }}">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Adjustment
+                                <i class="fas fa-plus" aria-hidden="true"></i> Add Adjustment
                             </a>
                         </li>
+                    @endcan
+
                     <li class="nav-item">
                         <a class="nav-link text-dark active" href="javascript:void(0);">
-                            <i class="fa fa-eye" aria-hidden="true"></i> Supplier Payment Details
+                            <i class="fas fa-eye" aria-hidden="true"></i> Supplier Payment Details
                         </a>
                     </li>
                 </ul>
@@ -91,7 +95,7 @@
                             <tfoot>
                                 <tr>
                                     <th colspan="2">Total</th>
-                                    <th style="text-align: right;">{{ $data->total_amount }}</th>
+                                    <th style="text-align: right;">{{ $data->amount }}</th>
                                 </tr>
                             </tfoot>
                         </table>

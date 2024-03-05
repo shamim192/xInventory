@@ -65,9 +65,9 @@
             </thead>
 
             <tbody id="responseHtml">
-                @foreach ($items as $key => $item)
+                @foreach ($data->transactions as $key => $item)
                     <tr class="subRow" id="row{{ $key }}">
-                        <input type="hidden" name="transaction_id[]" value="{{ $item->id }}">
+                        <input type="hidden" name="id[]" value="{{ $item->id }}">
                         <td>
                             @if ($key == 0)
                                 <a class="btn btn-success btn-flat" onclick="addRow({{ $key }})"><i class="fa fa-plus"></i></a>
@@ -102,7 +102,7 @@
                         <strong>Total:</strong>
                     </td>
                     <td class="text-right">
-                        <input type="text" class="form-control" id="total_amount" name="total_amount" value="{{ isset($data) ? $items->sum('amount') : '' }}" readonly />
+                        <input type="text" class="form-control" id="total_amount" name="total_amount" value="{{ $data->transactions->sum('amount') }}" readonly />
                     </td>
                     <td>&nbsp;</td>
                 </tr>
@@ -118,7 +118,6 @@
             </tfoot>
         </table>
     </div>
-
     <div class="col-md-12">
         <div class="text-center">
             <button type="submit" class="btn btn-secondary btn-flat">{{ isset($edit) ? 'Update' : 'Create' }}</button>
@@ -143,7 +142,7 @@
             success: (res) => {
                 if (res.success) {
                     if (isEdit) {
-                        let editAmount = {{ isset($edit) ? $data->total_amount : 0 }}
+                        let editAmount = {{ isset($edit) ? $data->amount : 0 }}
                         let type = $('#type').val();
                         let totalAmount = Number($('#total_amount').val());
                         if(type == 'Received') {

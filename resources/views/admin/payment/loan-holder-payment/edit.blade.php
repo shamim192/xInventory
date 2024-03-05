@@ -20,7 +20,6 @@
                         <i class="fa fa-plus" aria-hidden="true"></i> Add Adjustment
                     </a>
                 </li>
-    
                 <li class="nav-item">
                     <a class="nav-link text-dark active" href="javascript:void(0);">
                         <i class="fa fa-edit" aria-hidden="true"></i> Edit Loan Holder Payment

@@ -23,7 +23,7 @@
     
                 <li class="nav-item">
                     <a class="nav-link text-dark active" href="javascript:void(0);">
-                        <i class="fas fa-edit" aria-hidden="true"></i> Edit Supplier Payment
+                        <i class="fa fa-edit" aria-hidden="true"></i> Edit Supplier Payment
                     </a>
                 </li>
             </ul>

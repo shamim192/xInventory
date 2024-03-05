@@ -53,18 +53,19 @@ class LoanHolderPaymentController extends Controller
 
     public function create()
     {
-        $items = [
-            (object) [
-                'id' => 0,
-                'bank_id' => null,
-                'amount' => null,
-            ]
-        ];
+        $data = new Loan();
+
+        $data->setRelations([
+            'transactions' => collect([
+                new Transaction()
+            ])
+        ]);
+
 
         $banks = Bank::select(['id', 'name'])->where('status', 'Active')->get();
         $loanHolders = LoanHolder::select(['id', 'name', 'mobile', 'address'])->where('status', 'Active')->get();
 
-        return view('admin.payment.loan-holder-payment.create', compact('banks', 'loanHolders', 'items'));
+        return view('admin.payment.loan-holder-payment.create', compact('banks', 'loanHolders', 'data'));
     }
 
     public function adjustment()
@@ -97,16 +98,16 @@ class LoanHolderPaymentController extends Controller
         $data = Loan::create($storeData);
 
         if ($data && $data->type != 'Adjustment') {
-            foreach ($request->transaction_id as $key => $tranId) {
+            foreach ($request->input('bank_id') as $key => $bankId) {
                 $transactionData = [
                     'type' => $data->type,
                     'flag' => 'Loan',
                     'flagable_id' => $data->id,
                     'flagable_type' => Loan::class,
-                    'bank_id' => $request->bank_id[$key],
+                    'bank_id' => $bankId,
                     'datetime' => $data->date,
-                    'note' => $data->note,
-                    'amount' => $request->amount[$key],
+                    'note' => $data->note,                    
+                    'amount' => $request->input("amount.$key"),
                 ];
                 Transaction::create($transactionData);
             }
@@ -128,24 +129,7 @@ class LoanHolderPaymentController extends Controller
         $banks = Bank::select(['id', 'name'])->where('status', 'Active')->get();
         $loanHolders = LoanHolder::select(['id', 'name', 'mobile', 'address'])->where('status', 'Active')->get();
 
-        if ($data->type == 'Adjustment') {
-            $adjustment = true;
-            return view('admin.payment.loan-holder-payment.edit', compact('data', 'loanHolders', 'adjustment'));
-        }
-
-        if ($data->transactions) {
-            $items = $data->transactions;
-        } else {
-            $items = [
-                (object) [
-                    'id' => 0,
-                    'bank_id' => null,
-                    'amount' => null,
-                ]
-            ];
-        }
-
-        return view('admin.payment.loan-holder-payment.edit', compact('data', 'banks', 'loanHolders', 'items'))->with('edit', $id);
+        return view('admin.payment.loan-holder-payment.edit', compact('data', 'banks', 'loanHolders'))->with('edit', $id);
     }
 
     public function update(Request $request, $id)
@@ -173,20 +157,21 @@ class LoanHolderPaymentController extends Controller
         Transaction::where('flagable_id', $data->id)->where('flagable_type', Loan::class)->delete();
 
         if ($data && $data->type != 'Adjustment') {
-                $transactionData = [];
-                foreach ($request->transaction_id as $key => $tinId) {
-                    $transactionData[] = [
+            $itemIdArr = [];
+            foreach ($request->input('bank_id') as $key => $bankId) {
+                $item = [
                         'type' => $data->type,
                         'flag' => 'Loan',
                         'flagable_id' => $data->id,
                         'flagable_type' => Loan::class,
-                        'bank_id' => $request->bank_id[$key],
+                        'bank_id' => $bankId,
                         'datetime' => $data->date,
                         'note' => $data->note,
-                        'amount' => $request->amount[$key],
+                        'amount' => $request->input("amount.$key"),
                     ];
+                    $itemIdArr[] = $data->transactions()->updateOrCreate(['id' => $request->input("id.$key")], $item)->id;
                 }
-                Transaction::insert($transactionData);
+                $data->transactions()->whereNotIn('id', $itemIdArr)->delete();
         }
 
         session()->flash('successMessage', 'Loan Holder Payment was successfully updated!');

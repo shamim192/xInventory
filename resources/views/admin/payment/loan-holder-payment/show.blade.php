@@ -7,24 +7,27 @@
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('loan-holder-payments.index') . qString() }}">
-                            <i class="fa fa-list" aria-hidden="true"></i> Loan Holder Payment List
+                            <i class="fas fa-list" aria-hidden="true"></i> Loan Holder Payment List
                         </a>
                     </li>
+
+                    @can('add loan_holder_payment')
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="{{ route('loan-holder-payments.create') . qString() }}">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Loan Holder Payment
+                                <i class="fas fa-plus" aria-hidden="true"></i> Add Loan Holder Payment
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="{{ route('loan-holder-payments.adjustment') . qString() }}">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Adjustment
+                                <i class="fas fa-plus" aria-hidden="true"></i> Add Adjustment
                             </a>
                         </li>
+                    @endcan
 
                     <li class="nav-item">
                         <a class="nav-link text-dark active" href="javascript:void(0);">
-                            <i class="fa fa-eye" aria-hidden="true"></i> Loan Holder Payment Details
+                            <i class="fas fa-eye" aria-hidden="true"></i> Loan Holder Payment Details
                         </a>
                     </li>
                 </ul>
@@ -50,7 +53,7 @@
                         <tr>
                             <th>Amount</th>
                             <th>:</th>
-                            <td>{{ $data->total_amount }}</td>
+                            <td>{{ $data->amount }}</td>
                         </tr>
                         <tr>
                             <th>Note</th>
@@ -92,7 +95,7 @@
                             <tfoot>
                                 <tr>
                                     <th colspan="2">Total</th>
-                                    <th style="text-align: right;">{{ $data->total_amount }}</th>
+                                    <th style="text-align: right;">{{ $data->amount }}</th>
                                 </tr>
                             </tfoot>
                         </table>

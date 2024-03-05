@@ -52,26 +52,25 @@ class SupplierPaymentController extends Controller
 
     public function create()
     {
-        $items = [
-            (object) [
-                'id' => 0,
-                'bank_id' => null,
-                'amount' => null,
-            ]
-        ];
+        $data = new SupplierPayment();
+
+        $data->setRelations([
+            'transactions' => collect([
+                new Transaction()
+            ])
+        ]);
 
         $banks = Bank::select(['id', 'name'])->where('status', 'Active')->get();
         $suppliers = Supplier::select(['id', 'name', 'mobile', 'address'])->where('status', 'Active')->get();
 
-        return view('admin.payment.supplier-payment.create', compact('banks', 'suppliers', 'items'));
+        return view('admin.payment.supplier-payment.create', compact('banks', 'suppliers', 'data'));
     }
 
     public function adjustment()
     {
         $banks = Bank::select(['id', 'name'])->where('status', 'Active')->get();
         $suppliers = Supplier::select(['id', 'name', 'mobile', 'address'])->where('status', 'Active')->get();
-        $adjustment = true;
-        
+        $adjustment = true;        
 
         return view('admin.payment.supplier-payment.create', compact('banks', 'suppliers', 'adjustment'));
     }
@@ -97,16 +96,16 @@ class SupplierPaymentController extends Controller
         $data = SupplierPayment::create($storeData);
 
         if ($data && $data->type != 'Adjustment') {
-            foreach ($request->transaction_id as $key => $tranId) {
+            foreach ($request->input("bank_id") as $key => $bankId) {
                 $transactionData = [
-                    'type' => $data->type,
+                    'type' => $data->type == 'Payment' ? 'Received' : 'Payment',
                     'flag' => 'Supplier Payment',
                     'flagable_id' => $data->id,
                     'flagable_type' => SupplierPayment::class,
-                    'bank_id' => $request->bank_id[$key],
+                    'bank_id' => $bankId,
                     'datetime' => $data->date,
                     'note' => $data->note,
-                    'amount' => $request->amount[$key],
+                    'amount' => $request->input("amount.$key"),
                 ];
                 Transaction::create($transactionData);
             }
@@ -128,24 +127,7 @@ class SupplierPaymentController extends Controller
         $banks = Bank::select(['id', 'name'])->where('status', 'Active')->get();
         $suppliers = Supplier::select(['id', 'name', 'mobile', 'address'])->where('status', 'Active')->get();
 
-        if ($data->type == 'Adjustment') {
-            $adjustment = true;
-            return view('admin.payment.supplier-payment.edit', compact('data', 'suppliers', 'adjustment'));
-        }
-
-        if ($data->transactions) {
-            $items = $data->transactions;
-        } else {
-            $items = [
-                (object) [
-                    'id' => 0,
-                    'bank_id' => null,
-                    'amount' => null,
-                ]
-            ];
-        }
-
-        return view('admin.payment.supplier-payment.edit', compact('data', 'banks', 'suppliers', 'items'))->with('edit', $id);
+        return view('admin.payment.supplier-payment.edit', compact('data', 'banks', 'suppliers'))->with('edit', $id);
     }
 
     public function update(Request $request, $id)
@@ -173,20 +155,21 @@ class SupplierPaymentController extends Controller
         Transaction::where('flagable_id', $data->id)->where('flagable_type', SupplierPayment::class)->delete();
 
         if ($data && $data->type != 'Adjustment') {
-                $transactionData = [];
-                foreach ($request->transaction_id as $key => $tinId) {
-                    $transactionData[] = [
-                        'type' => $data->type,
+            $itemIdArr = [];
+            foreach ($request->input('bank_id') as $key => $bankId) {
+                $item = [
+                        'type' => $data->type == 'Payment' ? 'Received' : 'Payment',
                         'flag' => 'Supplier Payment',
                         'flagable_id' => $data->id,
                         'flagable_type' => SupplierPayment::class,
-                        'bank_id' => $request->bank_id[$key],
+                        'bank_id' => $bankId,
                         'datetime' => $data->date,
                         'note' => $data->note,
-                        'amount' => $request->amount[$key],
+                        'amount' => $request->input("amount.$key"),
                     ];
+                    $itemIdArr[] = $data->transactions()->updateOrCreate(['id' => $request->input("id.$key")], $item)->id;
                 }
-                Transaction::insert($transactionData);
+                $data->transactions()->whereNotIn('id', $itemIdArr)->delete();
         }
 
         session()->flash('successMessage', 'Supplier Payment was successfully updated!');

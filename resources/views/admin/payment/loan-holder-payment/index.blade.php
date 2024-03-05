@@ -74,7 +74,7 @@
                                     <td>{{ dateFormat($val->date) }}</td>
                                     <td>{{ $val->note }}</td>
                                     <td>{{ $val->type }}</td>
-                                    <td>{{ $val->total_amount }}</td>
+                                    <td>{{ $val->amount }}</td>
                                     <td>
                                         <x-sp-components::action-group>
                                                 <a class="dropdown-item"

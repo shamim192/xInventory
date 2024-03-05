@@ -38,7 +38,7 @@
         <div class="form-group @error('total_amount') has-error @enderror">
             <label class="control-label col-sm-3 required">Amount :</label>
             <div class="col-sm-9">
-                <input type="number" step="any" min="0" class="form-control" id="total_amount" name="total_amount" value="{{ old('total_amount', isset($data) ? $data->total_amount : '') }}" required onkeyup="checkAmount()">
+                <input type="number" step="any" min="0" class="form-control" id="total_amount" name="total_amount" value="{{ old('total_amount', isset($data) ? $data->amount : '') }}" required onkeyup="checkAmount()">
 
                 @error('total_amount')
                     <span class="help-block">{{ $message }}</span>
@@ -63,11 +63,9 @@
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="text-center">
-                <button type="submit" class="btn btn-secondary btn-flat">{{ isset($edit) ? 'Update' : 'Create' }}</button>
-                <button type="reset" class="btn btn-outline-secondary btn-flat">Reset</button>
-            </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-secondary btn-flat">{{ isset($data) ? 'Update' : 'Create' }}</button>
+            <button type="reset" class="btn btn-outline-secondary btn-flat">Reset</button>
         </div>
     </div>
 </div>
@@ -89,7 +87,7 @@
                 if (res.success) {
                     if (isEdit) {
                         let totalAmount = Number($('#total_amount').val());
-                        let due = (Number(res.due) - totalAmount);
+                        let due = (Number(res.due) + totalAmount);
                         $('#balance').val(due);
                         $('#final_balance').val(res.due);
                     } else {
@@ -115,7 +113,7 @@
         }
 
         let balance = Number($(`#balance`).val());
-        let finalBalance = (balance + totalAmount);
+        let finalBalance = (balance - totalAmount);
         if (finalBalance < 0) {
             $(`#total_amount`).val('');
             $(`#final_balance`).val('');

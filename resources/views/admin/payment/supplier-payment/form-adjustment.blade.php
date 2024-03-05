@@ -63,11 +63,10 @@
                 @enderror
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="text-center">
-                <button type="submit" class="btn btn-secondary btn-flat">{{ isset($edit) ? 'Update' : 'Create' }}</button>
-                <button type="reset" class="btn btn-outline-secondary btn-flat">Reset</button>
-            </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-secondary btn-flat">{{ isset($data) ? 'Update' : 'Create' }}</button>
+            <button type="reset" class="btn btn-outline-secondary btn-flat">Reset</button>
         </div>
     </div>
 </div>
