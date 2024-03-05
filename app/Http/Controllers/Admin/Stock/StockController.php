@@ -17,7 +17,6 @@ use Sudip\MediaUploader\Facades\MediaUploader;
 
 class StockController extends Controller
 {
-
     public function index(Request $request)
     {
         $sql = Stock::orderBy('id', 'DESC');
@@ -169,7 +168,6 @@ class StockController extends Controller
 
     public function show($id)
     {
-
         $data = Stock::select('stocks.*', 'transactions.bank_id', 'supplier_payments.amount AS paid_amount')->with('items')
 
             ->leftJoin('supplier_payments', function ($q) {
@@ -186,7 +184,6 @@ class StockController extends Controller
 
     public function edit($id)
     {
-
         $data = Stock::select('stocks.*', 'transactions.bank_id', 'supplier_payments.amount AS paid_amount')->with('items')
             ->leftJoin('supplier_payments', function ($q) {
                 $q->on('supplier_payments.stock_id', '=', 'stocks.id');
@@ -347,7 +344,7 @@ class StockController extends Controller
     }
 
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $data = Stock::find($id);
 

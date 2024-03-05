@@ -86,11 +86,11 @@ class CategoryController extends Controller
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        $categories = Category::findOrFail($id);
+        $data = Category::findOrFail($id);
 
-        $data = $categories->update($validatedData);
+        $updated = $data->update($validatedData);
 
-        if ($data) {
+        if ($updated) {
             session()->flash('successMessage', 'Category was successfully updated.');
         } else {
             session()->flash('errorMessage', 'Category update failed!');
@@ -99,9 +99,8 @@ class CategoryController extends Controller
         return redirect()->action([self::class, 'index'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-
         try {
             $data = Category::findOrFail($id);
             $data->delete();

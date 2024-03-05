@@ -45,14 +45,12 @@ class ProductController extends Controller
     public function create()
     {  
         $categories = CategoryService::get(true);
-        $baseUnits = BaseUnit::get();
-        
+        $baseUnits = BaseUnit::get();        
         return view('admin.product.create',compact('categories','baseUnits'));
     }
 
     public function store(Request $request)
     {
-
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'code' => 'required|string|unique:products,code',
@@ -78,14 +76,12 @@ class ProductController extends Controller
 
     public function show(Request $request, $id)
     {
-
         $data = Product::findOrFail($id);
         return view('admin.product.show', compact('data'));
     }
 
     public function edit(Request $request, $id)
     {
-
         $data = Product::findOrFail($id);
         $baseUnits = BaseUnit::get();        
         $categories = CategoryService::get(true);
@@ -94,7 +90,6 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'code' => 'required|string|unique:products,code,' . $id,
@@ -120,9 +115,8 @@ class ProductController extends Controller
         return redirect()->action([self::class, 'index'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-
         try {
             $data = Product::findOrFail($id);
             $data->delete();

@@ -206,9 +206,7 @@ class StockReturnController extends Controller
                 }
             }
         }
-    }
-
-        
+    }        
         if ($updated) {
             session()->flash('successMessage', 'Stock Retrun was successfully updated.');
         } else {
@@ -217,7 +215,8 @@ class StockReturnController extends Controller
 
         return redirect()->action([self::class, 'create'], qArray());
     }
-    public function destroy(Request $request, $id)
+
+    public function destroy($id)
     {
         $data = StockReturn::find($id);
 

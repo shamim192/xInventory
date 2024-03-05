@@ -11,7 +11,6 @@ class UnitController extends Controller
 {
     public function index(Request $request)
     {
-
         $sql = Unit::orderBy('id', 'DESC');
 
         if ($request->q) {
@@ -20,6 +19,7 @@ class UnitController extends Controller
                 $q->where('base_unit_id', 'LIKE', '%' . $request->q . '%');              
             });
         }
+
         if ($request->from) {
             $sql->where('created_at', '>=', $request->from);
         }
@@ -42,7 +42,6 @@ class UnitController extends Controller
 
     public function store(Request $request)
     {
-
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'base_unit_id' => 'required|exists:base_units,id',            
@@ -63,14 +62,12 @@ class UnitController extends Controller
 
     public function show(Request $request, $id)
     {
-
         $data = Unit::findOrFail($id);        
         return view('admin.units.show', compact('data'));
     }
 
     public function edit(Request $request, $id)
     {
-
         $data = Unit::findOrFail($id);
         $baseUnits = BaseUnit::get();
         return view('admin.units.edit', compact('data','baseUnits'));
@@ -78,7 +75,6 @@ class UnitController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'base_unit_id' => 'required|exists:base_units,id',            
@@ -86,11 +82,11 @@ class UnitController extends Controller
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        $units = Unit::findOrFail($id);
+        $data = Unit::findOrFail($id);
 
-        $data = $units->update($validatedData);
+        $updated = $data->update($validatedData);
 
-        if ($data) {
+        if ($updated) {
             session()->flash('successMessage', 'Unit was successfully updated.');
         } else {
             session()->flash('errorMessage', 'Unit update failed!');
@@ -99,9 +95,8 @@ class UnitController extends Controller
         return redirect()->action([self::class, 'index'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-
         try {
             $data = Unit::findOrFail($id);
             $data->delete();

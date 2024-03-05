@@ -62,7 +62,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['aut
 
     Route::group(['namespace' => 'Sale'], function () {
         Route::get('sale/products-by-category/{category}', 'SaleController@getProductsByCategory');
-        Route::post('sale/customer-ajax', 'SaleController@ajaxStore')->name('sale.new-customer-ajex');
         Route::get('customer-last-discount', 'SaleController@customerLastDiscount')->name('sale.customer.last.discount');
         Route::resource('sale', 'SaleController');
         Route::post('customer-wise-sale-ajax', 'SaleReturnController@customerWiseSale')->name('customer-wise-sale-ajax');

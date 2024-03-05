@@ -89,7 +89,6 @@ class SaleController extends Controller
 
     public function store(SaleRequest $request)
     {
-
         if ($request->paid_amount > 0) {
             $this->validate($request, [
                 'bank_id' => 'required|integer',
@@ -155,6 +154,7 @@ class SaleController extends Controller
                     'amount' => $request->paid_amount,
                     'sale_id' => $data->id,
                 ];
+
                 $payment = CustomerPayment::create($paidData);
 
                 if ($payment) {
@@ -185,27 +185,9 @@ class SaleController extends Controller
 
         return redirect()->action([self::class, 'create'], qArray());
     }
-    public function ajaxStore(Request $request)
-    {
-        $this->authorize('create customer');
-
-        $validatedData = $this->validate($request, [
-            'name' => 'required|max:255',
-            'mobile' => 'required|max:255|unique:customers,mobile',
-            'address' => 'nullable',
-            'date_of_birth' => 'nullable|date',
-            'shop_name' => 'nullable|max:255',
-            'status' => 'required|in:Active,Inactive',
-        ]);
-
-        Customer::create($validatedData);
-
-        return response()->json(['success' => true, 'successMessage' => 'Customer was successfully added!']);
-    }
 
     public function show($id)
     {
-
         $data = Sale::select('sales.*', 'transactions.bank_id', 'customer_payments.amount AS paid_amount')->with('items')
             ->leftJoin('customer_payments', function ($q) {
                 $q->on('customer_payments.sale_id', '=', 'sales.id');
@@ -230,6 +212,7 @@ class SaleController extends Controller
                 $q->where('transactions.flag', 'Customer Payment');
             })
             ->find($id);
+
         if ($data->items != null) {
             $items = $data->items;
         } else {
@@ -393,7 +376,6 @@ class SaleController extends Controller
 
     public function getProductsByCategory($category)
     {
-
         $product = Product::with(['baseUnit.units'])->select('products.*', DB::raw("((IFNULL(A.inQty, 0) + IFNULL(D.inQty, 0)) - (IFNULL(B.outQty, 0) + IFNULL(C.outQty, 0))) AS stockQty"))
             ->join(DB::raw("(SELECT product_id, SUM(actual_quantity) AS inQty FROM stock_items GROUP BY product_id) AS A"), function ($q) {
                 $q->on('A.product_id', '=', 'products.id');

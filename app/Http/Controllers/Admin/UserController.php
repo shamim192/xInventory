@@ -11,7 +11,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-
         $sql = User::orderBy('id', 'DESC');
 
         if ($request->q) {
@@ -42,7 +41,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-
         $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'required|numeric|unique:users,mobile',
@@ -72,21 +70,18 @@ class UserController extends Controller
 
     public function show(Request $request, $id)
     {
-
         $data = User::findOrFail($id);
         return view('admin.user.show', compact('data'));
     }
 
     public function edit(Request $request, $id)
     {
-
         $data = User::findOrFail($id);
         return view('admin.user.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
     {
-
         $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'required|numeric|unique:users,mobile,' . $id . ',id',
@@ -123,7 +118,6 @@ class UserController extends Controller
 
     public function destroy(Request $request, $id)
     {
-
         try {
             $data = User::findOrFail($id);
             $data->delete();

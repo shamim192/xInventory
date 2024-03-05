@@ -147,7 +147,7 @@ class IncomeController extends Controller {
     {        
         $data = Income::find($id);
         
-      $updated =  $data->update([
+        $updated =  $data->update([
             'date' => dbDateFormat($request->date),
             'note' => $request->note,
             'total_amount' => $request->total_amount,

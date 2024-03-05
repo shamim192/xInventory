@@ -40,21 +40,14 @@ class LoanHolderController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validatedData= $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'nullable|max:255|unique:loan_holders,mobile',
             'address' => 'nullable|max:255',
             'status' => 'required|in:Active,Inactive',
         ]);
-
-        $storeData = [
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'address' => $request->address,
-            'status' => $request->status,
-        ];
         
-        $data = LoanHolder::create($storeData);
+        $data = LoanHolder::create($validatedData);
 
          if ($data) {
             session()->flash('successMessage', 'Loan Holder was successfully added.');
@@ -68,7 +61,6 @@ class LoanHolderController extends Controller
     public function show(Request $request, $id)
     {
         $data = LoanHolder::find($id);
-
         return view('admin.loan-holder.show', compact('data'));
     }
 
@@ -80,7 +72,7 @@ class LoanHolderController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'nullable|max:255|unique:loan_holders,mobile,'.$id.',id',
             'address' => 'nullable|max:255',
@@ -89,14 +81,7 @@ class LoanHolderController extends Controller
 
         $data = LoanHolder::find($id);
 
-        $storeData = [
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'address' => $request->address,
-            'status' => $request->status,
-        ];
-
-        $updated =  $data->update($storeData);
+        $updated =  $data->update($validatedData);
 
         if ($updated) {
             session()->flash('successMessage', 'Loan Holder was successfully updated.');
@@ -107,7 +92,7 @@ class LoanHolderController extends Controller
         return redirect()->action([self::class, 'index'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
             $data = LoanHolder::findOrFail($id);

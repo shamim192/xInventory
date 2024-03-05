@@ -38,21 +38,14 @@ class InvestorController extends Controller {
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+       $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'nullable|max:255|unique:investors,mobile',
             'address' => 'nullable|max:255',
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        $storeData = [
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'address' => $request->address,
-            'status' => $request->status,
-        ];
-      
-      $data =  Investor::create($storeData);
+        $data =  Investor::create($validatedData);
 
         if ($data) {
             session()->flash('successMessage', 'Investor was successfully added.');
@@ -67,20 +60,18 @@ class InvestorController extends Controller {
     {
 
         $data = Investor::find($id);
-
         return view('admin.investor.show', compact('data'));
     }
 
     public function edit(Request $request, $id)
     {
         $data = Investor::find($id);
-
         return view('admin.investor.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'nullable|max:255|unique:investors,mobile,'.$id.',id',
             'address' => 'nullable|max:255',
@@ -89,14 +80,7 @@ class InvestorController extends Controller {
 
         $data = Investor::find($id);
 
-        $storeData = [
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'address' => $request->address,
-            'status' => $request->status,
-        ];
-
-      $updated =  $data->update($storeData);
+        $updated =  $data->update($validatedData);
 
         if ($updated) {
             session()->flash('successMessage', 'Investor was successfully updated.');
@@ -107,7 +91,7 @@ class InvestorController extends Controller {
         return redirect()->action([self::class, 'index'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
             $data = Investor::findOrFail($id);

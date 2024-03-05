@@ -39,7 +39,6 @@ class SupplierController extends Controller
 
     public function store(Request $request)
     {
-
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'required|max:255|unique:suppliers,mobile',
@@ -61,21 +60,18 @@ class SupplierController extends Controller
 
     public function show(Request $request, $id)
     {
-
         $data = Supplier::findOrFail($id);
         return view('admin.supplier.show', compact('data'));
     }
 
     public function edit(Request $request, $id)
     {
-
         $data = Supplier::findOrFail($id);
         return view('admin.supplier.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
     {
-
         $validatedData = $this->validate($request, [
             'name' => 'required|max:255',
             'mobile' => 'required|max:255|unique:suppliers,mobile,'.$id.',id',
@@ -97,9 +93,8 @@ class SupplierController extends Controller
         return redirect()->action([self::class, 'index'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-
         try {
             $data = Supplier::findOrFail($id);
             $data->delete();

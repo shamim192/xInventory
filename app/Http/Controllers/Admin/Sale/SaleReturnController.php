@@ -217,7 +217,7 @@ class SaleReturnController extends Controller {
         return redirect()->action([self::class, 'create'], qArray());
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $data = SaleReturn::find($id);
 

@@ -32,7 +32,7 @@ class ProfileController extends Controller
         $data = User::find(Auth::user()->id);
         $data->update($formData);
 
-        $request->session()->flash('successMessage', $data->name."'s account was successfully updated!");
+        session()->flash('successMessage', $data->name."'s account was successfully updated!");
         return redirect()->route('profile');
     }
 
@@ -52,14 +52,14 @@ class ProfileController extends Controller
         $data = User::find(Auth::user()->id);
 
         if (!Hash::check($request->current_password, $data->password)) {
-            $request->session()->flash('errorMessage', "The specified password does not match the database password");
+            session()->flash('errorMessage', "The specified password does not match the database password");
         } else {
             $formData = [
                 'password' => Hash::make($request->password),
             ];
             $data->update($formData);
 
-            $request->session()->flash('successMessage', $data->name."'s password was successfully updated!");
+            session()->flash('successMessage', $data->name."'s password was successfully updated!");
         }
         
         return redirect()->route('profile');

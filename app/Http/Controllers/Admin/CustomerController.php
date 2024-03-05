@@ -102,7 +102,6 @@ class CustomerController extends Controller
 
     public function destroy(Request $request, $id)
     {
-
         try {
             $data = Customer::findOrFail($id);
             $data->delete();

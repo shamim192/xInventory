@@ -12,7 +12,6 @@ use App\Models\SupplierPayment;
 
 class LoanHolderPaymentController extends Controller
 {
-
     public function index(Request $request)
     {
         $sql = Loan::with(['loanHolder']);
