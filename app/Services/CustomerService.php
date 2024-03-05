@@ -10,7 +10,7 @@ class CustomerService
     public static function due($customerId)
     {        
         $customer = Customer::select(
-            DB::raw("((IFNULL(A.amount, 0) - IFNULL(B.amount, 0)) - (IFNULL(C.inAmount, 0) + IFNULL(D.outAmount, 0))) AS due")
+            DB::raw("((IFNULL(A.amount, 0) + IFNULL(D.outAmount, 0)) - (IFNULL(C.inAmount, 0) + IFNULL(B.amount, 0))) AS due")
         )
         ->leftJoin(DB::raw("(SELECT customer_id, SUM(total_amount) AS amount FROM sales GROUP BY customer_id) AS A"), function($q) {
             $q->on('customers.id', '=', 'A.customer_id');
