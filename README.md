@@ -49,13 +49,15 @@ password: 12345678
 
 **you can change it from database as per your need.
 
-
 ## Feature's:
 
 Multiple Category Products
 Stock Management
 Sale Management
 Payment Module- Customer Payment, Supplier Payment , Loan Holder Payment, Income , Expense , Fund Transfer , Invest
+
+Future Plan:
+Reports - Sales Report, Stock Report, Sales and Stock ledger, Profit Loss, Balance Sheet
 
 let's have a look at some screenshots of the project pages
 
