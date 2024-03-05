@@ -6,11 +6,11 @@
 
 ## Installation
 
-Clone the repository or doanload the project from github
+Clone the repository or downlaod the project from github
 
     git clone https://github.com/shamim192/xInventory.git
 
-Copy that project in htdocs folder and open the folder location in cmd.
+Copy this project in htdocs folder and open the folder location in cmd.
 
 Now rename the "env.example" file to ".env"
 
