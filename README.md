@@ -49,6 +49,48 @@ password: 12345678
 
 **you can change it from database as per your need.
 
+let's have a look at some screenshots of the project pages
+
 ## Log In page
 
 # ![Log In Page](public/assets/images/login.png)
+
+## Dashboard
+
+# ![Dashboard](public/assets/images/dashboard.png)
+
+## Product
+
+# ![product](public/assets/images/product.png)
+
+## Stock 
+
+# ![stock](public/assets/images/stock.png)
+
+## Stock  Show 
+
+# ![stock show](public/assets/images/stock-show.png)
+
+## Stock  Return 
+
+# ![stock return](public/assets/images/stock-return.png)
+
+## Sale 
+
+# ![sale](public/assets/images/sale.png)
+
+## Sale  Show 
+
+# ![sale show](public/assets/images/sale_show.png)
+
+## Customer Payment 
+
+# ![customer payment](public/assets/images/customer_payment.png)
+
+## Customer Adjustment 
+
+# ![customer adjustment](public/assets/images/adjustmet.png)
+
+## Income 
+
+# ![income](public/assets/images/income.png)
