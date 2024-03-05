@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'sudip.me') }}</title>
+    <title>{{ config('app.name', 'shamim.me') }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/font-awesome/css/font-awesome.min.css') }}">
@@ -67,12 +67,12 @@
                                 <li class="user-footer">
                                     <div class="pull-left">
                                         <a class="btn btn-info btn-flat"
-                                            href="{{ route('profile') }}">{{ __('lang.My Account') }}</a>
+                                            href="{{ route('profile') }}">My Account</a>
                                     </div>
                                     <div class="pull-right">
                                         <a class="btn btn-danger btn-flat" href="{{ route('logout') }}"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            {{ __('lang.Logout') }}
+                                            Logout
                                         </a>
 
                                         <form id="logout-form" class="non-validate" action="{{ route('logout') }}"
@@ -290,11 +290,11 @@
 
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                {{ __('lang.Developed by') }} <a href="#" target="_blank">Md. Shamim Hossain</a>
+                Developed by <a href="#" target="_blank">Md. Shamim Hossain</a>
             </div>
             <strong>
-                {{ __('lang.Copyright') }} &copy; {{ date('Y') }} {{ config('app.name', 'sudip.me') }}.
-            </strong> {{ __('lang.All rights reserved') }}
+                Copyright &copy; {{ date('Y') }} {{ config('app.name', 'shamim.me') }}.
+            </strong> All rights reserved
         </footer>
     </div>
 

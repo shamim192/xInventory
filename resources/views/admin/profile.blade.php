@@ -10,7 +10,7 @@
         <div class="col-sm-6">
             <div class="box">
                 <div class="box-body">
-                    <h4 class="box-title">Account  {{ __('lang.Details') }}</h4>
+                    <h4 class="box-title">Account  Details</h4>
                     <form method="POST" action="{{ route('profile') }}">
                         @csrf
 

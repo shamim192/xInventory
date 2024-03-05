@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'sudip.me') }}</title>
+    <title>{{ config('app.name', 'shamim.me') }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/font-awesome/css/font-awesome.min.css') }}">
@@ -15,7 +15,7 @@
 <body class="hold-transition login-page skin-black">
     <div class="login-box">
         <div class="login-logo">
-            <a>{{ config('app.name', 'sudip.me') }}</a>
+            <a>{{ config('app.name', 'shamim.me') }}</a>
         </div>
 
         @if (session('successMessage'))
