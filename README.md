@@ -51,10 +51,10 @@ password: 12345678
 
 ## Feature's:
 
-Multiple Category Products
-Stock Management
-Sale Management
-Payment Module- Customer Payment, Supplier Payment , Loan Holder Payment, Income , Expense , Fund Transfer , Invest
+Multiple Category Products <br />
+Stock Management <br />
+Sale Management <br />
+Payment Module- Customer Payment, Supplier Payment , Loan Holder Payment, Income , Expense , Fund Transfer , Invest <br />
 
 Future Plan:
 Reports - Sales Report, Stock Report, Sales and Stock ledger, Profit Loss, Balance Sheet
